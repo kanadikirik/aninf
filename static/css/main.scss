@@ -1,0 +1,236 @@
+@import './colors.scss';
+@import './spacing.scss';
+@import './ui.scss';
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+
+@font-face {
+  font-family: headBold;
+  src: url("/static/font/bold.otf");
+}
+
+@font-face {
+  font-family: fontNormal;
+  src: url("/static/font/regular.otf");
+}
+.cf-blue{
+  color: $blue;
+}
+.cf-green{
+  color: $green;
+}
+.cf-twitter{
+  color: $twitter;
+}
+.cf-facebook{
+  color: $facebook;
+}
+.cf-whatsapp{
+  color: $whatsapp;
+}
+.bold{
+  font-weight: bold;
+}
+.fs-small{
+  font-size: 0.9rem;
+}
+
+h1, h2, h3, h4, h5, h6, p, body{
+  margin: 0;
+}
+h1, h2, h3, h4, h5, h6{
+  font-family: headBold;
+}
+p, span, a, button, textarea, input{
+  font-family: fontNormal;
+}
+button{
+  outline: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: $border-radius;
+  padding: 0.3rem 1rem;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}
+a{
+  text-decoration: none;
+  color: black;
+}
+input, textarea{
+  border: none;
+  @include space('padding', 'y', 1.5);
+  @include space('padding', 'x', 4);
+  font-size: 1rem;
+  border-radius: $border-radius;
+  outline: none;
+}
+textarea{
+  resize: none;
+  @include space('padding', 'y', 4);
+}
+.container{
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.navbar{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @include space('padding', 'y', 5);
+  a{
+    margin-left: 1rem;
+    margin-right: 1rem;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+}
+.logo{
+  color: $blue;
+}
+.home-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: 5vh;
+  padding-top: 5vh;
+  margin-bottom: 5vh;
+  img{
+    width: 35%;
+  }
+  background-color: rgba($color: #F0F2F6, $alpha: 0.5);
+  border-radius: $border-radius;
+}
+.login-buttons{
+  display: flex;
+  button{
+    @include space('margin', 'top', 4);
+    @include space('padding', 'y', 2);
+  }
+  button:nth-child(0){
+    margin: 1rem;
+  }
+}
+.google-login-button{
+  color: $blue;
+  border: 0.1rem solid $blue;
+  border-radius: 2rem;
+}
+.create-knowledge{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: center;
+
+}
+.creation-form{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 60%;
+  input, textarea{
+    border: 1px solid rgba($color: $blue, $alpha: 0.3);
+    @include space('margin', 'y', 3);
+    width: 100%;
+    &:focus{
+      border-color: $blue;
+    }
+    &::placeholder{
+      font-size: 0.9rem;
+    }
+  }
+  textarea{
+    height: 30vh;
+  }
+  span, h3{
+    color: $blue;
+  }
+  .error-text{
+    color: red;
+  }
+}
+.creation-form-buttons{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  button{
+    @include space('margin', 'top', 5);
+    @include space('margin', 'right', 5);
+    font-weight: bold;
+  }
+  button:nth-child(1){
+    padding-left: 0;
+  }
+  button:nth-child(2){
+    background-color: $blue;
+    color: white;
+    border-radius: 2rem;
+  }
+}
+.knowledge-list{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  @include space('margin', 'y', 5);
+}
+.knowledge-list-title{
+  display: flex;
+  align-items: center;
+  @include space('margin', 'bottom', 5);
+  button{
+    @include space('margin', 'left', 5);
+  }
+}
+.create-button{
+  background-color: $blue;
+  font-weight: bold;
+  color: white;
+  border-radius: 1.3rem;
+}
+.knowledge{
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  width: 50%;
+  @include space('margin', 'y', 3);
+  border-radius: $border-radius;
+  background-color: rgba($color: #F0F2F6, $alpha: 0.5);
+}
+.knowledge-content{
+  @include space('padding', 'all', 4);
+}
+.knowledge-menu{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #E9EBFB;
+  border-top-right-radius: $border-radius;
+  border-bottom-right-radius: $border-radius;
+  @include space('padding', 'all', 3);
+}
+.knowledge-body{
+  border-left: 0.15rem solid $blue;
+  @include space('padding', 'left', 3);
+  @include space('margin', 'y', 3);
+  margin-left: 0.60rem;
+}
+.knowledge-author{
+  display: flex;
+  align-items: center;
+  img{
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    @include space('margin', 'right', 2);
+  }
+}
+.knowledge-source{
+  display: flex;
+  align-items: center;
+  margin-left: calc(1em - 0.75rem);
+}

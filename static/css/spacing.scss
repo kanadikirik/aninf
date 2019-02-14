@@ -1,0 +1,201 @@
+@mixin padding($size) {
+  @if $size == 'normal'{
+    padding: 0.5rem;
+  }
+}
+@mixin space($type, $side, $size){ 
+  $size: $size * 0.25rem;
+  @if $side == 'all'{
+    @if $type == 'margin'{
+      margin: $size !important;
+    } @else if $type == 'padding'{
+      padding: $size !important;
+    }
+  } @else if $side == 'top'{
+      @if $type == 'margin'{
+        margin-top: $size !important;
+      } @else if $type == 'padding'{
+        padding-top: $size !important;
+      }
+  } @else if $side == 'right'{
+      @if $type == 'margin'{
+        margin-right: $size !important;
+      } @else if $type == 'padding'{
+        padding-right: $size !important;
+      }
+  } @else if $side == 'bottom'{
+      @if $type == 'margin'{
+        margin-bottom: $size !important;
+      } @else if $type == 'padding'{
+        padding-bottom: $size !important;
+      }
+  } @else if $side == 'left'{
+      @if $type == 'margin'{
+        margin-left: $size !important;
+      } @else if $type == 'padding'{
+        padding-left: $size !important;
+      }
+  } @else if $side == 'x'{
+      @if $type == 'margin'{
+        margin-right: $size !important;
+        margin-left: $size !important;
+      } @else if $type == 'padding'{
+        padding-right: $size !important;
+        padding-left: $size !important;
+      }
+  } @else if $side == 'y'{
+      @if $type == 'margin'{
+        margin-top: $size !important ;
+        margin-bottom: $size !important;
+      } @else if $type == 'padding'{
+        padding-top: $size !important;
+        padding-bottom: $size !important;
+      }
+  }
+}
+
+$content-padding: 2rem;
+$btn-padding: 0.5rem 1rem;
+
+.p-content{
+  padding: $content-padding;
+}
+
+.m-0{
+  margin: 0 !important;
+}
+.p-0{
+  padding: 0 !important;
+}
+.py-1{
+  @include space('padding', 'y', 1);
+}
+.mt-1{
+  @include space('margin', 'top', 1);
+}
+.mb-1{
+  @include space('margin', 'bottom', 1);
+}
+.p-1{
+  @include space('padding', 'all', 1);
+}
+.p-2{
+  @include space('padding', 'all', 2);
+}
+.py-2{
+  @include space('padding', 'y', 2);
+}
+.mt-2{
+  @include space('margin', 'top', 2)
+}
+.m-2{
+  @include space('margin', 'all', 2)
+}
+.mr-2{
+  @include space('margin', 'right', 2);
+}
+.m-3{
+  @include space('margin', 'all', 3)
+}
+.p-3{
+  @include space('padding', 'all', 3);
+}
+.pb-3{
+  @include space('padding', 'bottom', 3);
+}
+.py-3{
+  @include space('padding', 'y', 3);
+}
+.my-3{
+  @include space('margin', 'y', 3)
+}
+.mx-3{
+  @include space('margin', 'x', 3)
+}
+.mt-3{
+  @include space('margin', 'top', 3)
+}
+.mb-3{
+  @include space('margin', 'bottom', 3)
+}
+.mr-3{
+  @include space('margin', 'right', 3);
+}
+.ml-3{
+  @include space('margin', 'left', 3);
+}
+.mx-4{
+  @include space('margin', 'x', 4);
+}
+.mr-4{
+  @include space('margin', 'right', 4);
+}
+.px-4{
+  @include space('padding', 'x', 4);
+}
+.p-4{
+  @include space('padding', 'all', 4);
+}
+.pt-4{
+  @include space('padding', 'top', 4);
+}
+.pl-4{
+  @include space('padding', 'left', 4);
+}
+.pb-4{
+  @include space('padding', 'bottom', 4);
+}
+.py-4{
+  @include space('padding', 'y', 4);
+}
+.mt-5{
+  @include space('margin', 'top', 5);
+}
+.my-5{
+  @include space('margin', 'y', 5)
+}
+.p-5{
+  @include space('padding', 'all', 5);
+}
+.m-5{
+  @include space('margin', 'all', 5);
+}
+.mt-5{
+  @include space('margin', 'top', 5)
+}
+.pl-5{
+  @include space('padding', 'left', 5)
+}
+.py-5{
+  @include space('padding', 'y', 10)
+}
+.mb-5{
+  @include space('margin', 'bottom', 5)
+}
+.mr-5{
+  @include space('margin', 'right', 5);
+}
+.py-6{
+  @include space('padding', 'y', 6);
+}
+.mt-7{
+  @include space('margin', 'top', 7);
+}
+.px-8{
+  @include space('padding', 'x', 8);
+}
+.my-10{
+  @include space('margin', 'y', 10);
+}
+.py-10{
+  @include space('padding', 'y', 10);
+}
+.p-10{
+  @include space('padding', 'all', 10);
+}
+
+@media screen and (max-width: 1300px){
+  .my-10-r{
+    @include space('margin', 'y', 10);
+  }
+}

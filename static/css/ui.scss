@@ -1,0 +1,232 @@
+$border-radius: 0.6rem;
+$border-radius-lg: 1rem;
+$shadow: 0 1rem 3rem rgba(0,0,0,.15);
+$shadow-lg: 0 1rem 3rem rgba($color: black, $alpha: .175);
+$shadow-sm: 0 .125rem .25rem rgba(0,0,0,.075);
+$shadow-pink: 0 1rem 3rem rgba($color: $colorfull-pink, $alpha: .15);
+$shadow-pink-lg: 0 1rem 3rem rgba($color: $colorfull-pink, $alpha: .175);
+$border-slim: 1px solid #dee2e6!important;
+ 
+// Text
+.error-text{
+  color: red;
+}
+
+// icon
+.icon{
+  font-size: 1rem;
+}
+.icon-lg{
+  font-size: 1.25rem;
+}
+
+// border
+.border-red{
+  border-color: $colorfull-pink !important;
+}
+
+// shadow
+.shadow{
+  box-shadow: $shadow;
+}
+.shadow-sm{
+  box-shadow: $shadow-sm;
+}
+.loading-container{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.loading-circle{
+  border: 0.3rem solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 0.3rem solid $colorfull-blue;
+  width: 3vh;
+  height: 3vh;
+  -webkit-animation: spin 1.5s linear infinite; /* Safari */
+  animation: spin 1.5s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Modal
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50%;
+  height: 90%;
+  border-radius: 0.5rem;
+  box-shadow: $shadow;
+}
+
+.created-successfully, .created-failure{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  text-align: center;
+  font-weight: bold;
+}
+
+.created-successfully{
+  button{
+    font-weight: bold;
+    color: $blue;
+  }
+}
+
+.created-failure-buttons{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @include space('margin', 'top', 5);
+  button:nth-child(1){
+    font-weight: bold;
+    background-color: $blue;
+    color: white;
+  }
+}
+
+
+$circle-length: 151px;
+$check-length: 36px;
+
+@keyframes scaleAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes drawCircle {
+  0% {
+    stroke-dashoffset: $circle-length;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes drawCheck {
+  0% {
+    stroke-dashoffset: $check-length;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+#successAnimationCircle {
+  stroke-dasharray: $circle-length $circle-length;
+  stroke: $green;
+}
+
+#successAnimationCheck {
+  stroke-dasharray: $check-length $check-length;
+  stroke: #fff;
+}
+
+#successAnimationResult {
+  fill: $green;
+  opacity: 0;
+}
+
+#successAnimation.animated {
+  animation: 1s ease-out 0s 1 both scaleAnimation;
+  #successAnimationCircle {
+    animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle,
+               0.3s linear 0.9s 1 both fadeOut;
+  }
+  
+  #successAnimationCheck {
+    animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck,
+               0.3s linear 0.9s 1 both fadeOut;
+  }
+  
+  #successAnimationResult {
+    animation: 0.3s linear 0.9s both fadeIn;
+  }
+}
+
+.failure-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 0;
+  &.circle {
+    -webkit-animation: failure-dash .9s ease-in-out;
+    animation: failure-dash .9s ease-in-out;
+  }
+  &.line {
+    stroke-dashoffset: 1000;
+    -webkit-animation: failure-dash .9s .35s ease-in-out forwards;
+    animation: failure-dash .9s .35s ease-in-out forwards;
+  }
+}
+
+
+@-webkit-keyframes failure-dash {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes failure-dash {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
