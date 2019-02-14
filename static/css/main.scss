@@ -192,26 +192,21 @@ textarea{
   border-radius: 1.3rem;
 }
 .knowledge{
-  display: flex;
-  align-items: stretch;
   justify-content: space-between;
   width: 50%;
   @include space('margin', 'y', 3);
-  border-radius: $border-radius;
-  background-color: rgba($color: #F0F2F6, $alpha: 0.5);
-}
-.knowledge-content{
   @include space('padding', 'all', 4);
+  border-radius: $border-radius;
+  background-color: rgba($color: #F0F2F6, $alpha: 0.3);
+  h4{
+    font-size: 1.1rem;
+  }
 }
 .knowledge-menu{
   display: flex;
   align-items: center;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: #E9EBFB;
-  border-top-right-radius: $border-radius;
-  border-bottom-right-radius: $border-radius;
-  @include space('padding', 'all', 3);
+  justify-content: flex-end;
+  @include space('padding', 'top', 3);
 }
 .knowledge-body{
   border-left: 0.15rem solid $blue;

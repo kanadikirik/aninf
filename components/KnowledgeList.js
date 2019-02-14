@@ -41,7 +41,6 @@ export default class KnowledgeList extends React.Component {
           return (knowledgesToday.map(knowledge => {
             return (
               <div key={knowledge.id} className="knowledge">
-                <div className="knowledge-content">
                   <div className="knowledge-author">
                     <img src={knowledge.author.photoURL} alt={`aninf ${knowledge.author.displayName}`} />
                     <p><span className="bold">{knowledge.author.displayName.split(" ")[0]}</span> anlattı:</p>
@@ -54,15 +53,11 @@ export default class KnowledgeList extends React.Component {
                     <FaLink className="mr-3"/>
                     <p className="cf-blue">{knowledge.source}</p>
                   </div>
+                <div className="knowledge-menu">
+                  <button><FaTwitter className="icon-lg cf-twitter" /></button>
+                  <button><FaFacebook className="icon-lg cf-facebook" /></button>
+                  <button><FaWhatsapp className="icon-lg cf-whatsapp" /></button>
                 </div>
-                {/* 
-                  <div className="knowledge-menu">
-                    <FaTwitter className="icon-lg cf-twitter" />
-                    <FaFacebook className="icon-lg cf-facebook" />
-                    <FaWhatsapp className="icon-lg cf-whatsapp" />
-                    <FaEllipsisH className="icon" />
-                  </div>
-                */}
               </div>
             )
           })
