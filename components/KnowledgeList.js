@@ -51,7 +51,7 @@ export default class KnowledgeList extends React.Component {
                   </div>
                   <div className="knowledge-source">
                     <FaLink className="mr-3"/>
-                    <p className="cf-blue">{knowledge.source}</p>
+                    <a href={knowledge.source} className="cf-blue">{knowledge.source}</a>
                   </div>
                 <div className="knowledge-menu">
                   <button><FaTwitter className="icon-lg cf-twitter" /></button>
