@@ -1,5 +1,5 @@
 // Services
-import { Knowledge } from "../services/Knwoledge";
+import { Knowledge } from "../services/Knowledge";
 // Components
 import Modal from './Modal';
 import { LoadingCircle } from './LoadingCircle';
