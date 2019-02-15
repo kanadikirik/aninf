@@ -55,4 +55,12 @@ export class Knowledge {
     .catch(err => console.error(err));
     return knowledges;
   }
+
+  static delete = async (id) => {
+    let status = false;
+    await Knowledge.collection().doc(id).delete()
+    .then(() => status = true)
+    .catch(err => console.log(err));
+    return status;
+  }
 }
