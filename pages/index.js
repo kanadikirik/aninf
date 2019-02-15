@@ -10,7 +10,7 @@ export default class index extends React.Component {
     const { loaded, user, signIn } = this.props;
     return (
       <div className="container">
-        <Navbar />
+        <Navbar user={user} />
         <HomeHeader loaded={loaded} user={user} signIn={signIn} />
         <KnowledgeList user={user} />
       </div>
