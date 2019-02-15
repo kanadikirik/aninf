@@ -86,9 +86,19 @@ textarea{
     font-weight: bold;
     font-size: 1rem;
   }
+  img{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    @include space('margin', 'right', 2);
+  }
 }
 .logo{
   color: $blue;
+}
+.navbar-nav{
+  display: flex;
+  align-items: center;
 }
 .home-header{
   display: flex;
@@ -192,6 +202,7 @@ textarea{
   border-radius: 1.3rem;
 }
 .knowledge{
+  position: relative;
   justify-content: space-between;
   width: 50%;
   @include space('margin', 'y', 3);
@@ -202,11 +213,66 @@ textarea{
     font-size: 1.1rem;
   }
 }
+.knowledge-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
 .knowledge-menu{
   display: flex;
   align-items: center;
   justify-content: flex-end;
   @include space('padding', 'top', 3);
+}
+.knowledge-extra{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  background-color: #F0F2F6;
+  color: white;
+  transform: translateY(4rem) translateX(-1.5em);
+  right: 0;
+  border-radius: $border-radius;
+  transition: all 1s;
+  @include space('padding', 'y', 4);
+  button{
+    border-radius: 0;
+    @include space('padding', 'x', 8);
+    font-weight: bold;
+    &:hover{
+      background-color: $blue;
+      color: white;
+    }
+  }
+}
+.deletion{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  top: -0.1rem;
+  left: -0.1rem;
+  border-radius: $border-radius;
+  font-weight: bold;
+  background-color: rgba($color: #F0F2F6, $alpha: 1)
+}
+.deletion-buttons{
+  display: flex;
+  align-items: center;
+  @include space('margin', 'top', 5);
+  button:nth-child(2){
+    background-color: $blue;
+    color: white;
+    border-radius: 2rem;
+    font-weight: bold;
+    @include space('margin', 'left', 3);
+  }
 }
 .knowledge-body{
   border-left: 0.15rem solid $blue;
