@@ -1,5 +1,4 @@
 import firebase from './Firebase';
-const users = firebase.firestore().collection("users");
 
 export class User {
 
