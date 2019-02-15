@@ -203,7 +203,6 @@ textarea{
   border-radius: 1.3rem;
 }
 .knowledge{
-
   position: relative;
   width: 50%;
   @include space('margin', 'y', 3);
@@ -339,4 +338,9 @@ textarea{
     font-weight: bold;
     @include space('margin', 'left', 3);
   }
+}
+.load-more{
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: bold;
 }
