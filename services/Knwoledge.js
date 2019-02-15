@@ -35,7 +35,7 @@ export class Knowledge {
   static create = async (knowledge) => {
     let status = false;
     await Knowledge.collection().add(knowledge)
-    .then(() => status = true)
+    .then((ref) => status = ref.id)
     .catch(err => console.error(err))
     return status;
   }
