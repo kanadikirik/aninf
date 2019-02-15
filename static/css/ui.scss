@@ -69,6 +69,7 @@ $border-slim: 1px solid #dee2e6!important;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
 }
 .modal-content {
   position: absolute;
