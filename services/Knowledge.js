@@ -56,11 +56,22 @@ export class Knowledge {
     return knowledges;
   }
 
+  static update = async (id, title, summary, source) => {
+    let status = false;
+    const updatedAt = new Date();
+    await Knowledge.collection().doc(id).update({
+      title, summary, source, updatedAt
+    })
+    .then(() => status = true)
+    .catch((err) => console.error(err));
+    return status
+  }
+
   static delete = async (id) => {
     let status = false;
     await Knowledge.collection().doc(id).delete()
     .then(() => status = true)
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
     return status;
   }
 }
