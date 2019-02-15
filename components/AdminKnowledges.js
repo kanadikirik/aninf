@@ -59,7 +59,15 @@ export default class AdminKnowledges extends React.Component {
                 <div id="admin-knowledges-list" className="admin-knowledges-list">
                   {
                     knowledges.map(knowledge => {
-                      return <KnowledgeItem key={knowledge.id} user={this.props.user} knowledge={knowledge} remove={this.removeKnowledge} />
+                      return (
+                              <KnowledgeItem 
+                                key       = {knowledge.id} 
+                                user      = {this.props.user} 
+                                knowledge = {knowledge} 
+                                remove    = {this.removeKnowledge} 
+                                className = "admin-knowledge"
+                              />
+                            )
                     })
                   }
                 </div>
@@ -76,8 +84,9 @@ export default class AdminKnowledges extends React.Component {
     const { loadingMore, loadMoreMessage } = this.state;
     return (
       <div className="admin-knowledges">
+        <h2>Anlatılanlar</h2>
         {this.knowledgesList()}
-        {loadingMore ? <div><LoadingCircle /></div> : <button onClick={this.loadMore}>{loadMoreMessage}</button>}
+        {loadingMore ? <div><LoadingCircle /></div> : <button className="load-more" onClick={this.loadMore}>{loadMoreMessage}</button>}
       </div>
     )
   }
