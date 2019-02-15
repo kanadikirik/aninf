@@ -45,7 +45,7 @@ export default class KnowledgeItem extends Component {
   }
 
   closeDeletion = () => {
-    this.setState({ deletionStep: 2 });
+    this.setState({ deletionStep: 1 });
   }
   openDeletion = () => {
     this.setState({ deletionStep: 2 });
