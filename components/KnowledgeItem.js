@@ -226,11 +226,11 @@ export default class KnowledgeItem extends Component {
             isExtraVisible &&
             <div className="knowledge-extra">
               { 
-                user.id === knowledge.author.id && 
+                (user.id === knowledge.author.id || user.type === 0) &&
                 <button onClick={this.openDeletion} className="">Sil</button> 
               }
               { 
-                user.id === knowledge.author.id && 
+                (user.id === knowledge.author.id || user.type === 0) &&
                 <button onClick={this.openUpdate}>Düzenle</button> 
               }
               <button onClick={this.openReporting}>Şikayet et</button>
