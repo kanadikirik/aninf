@@ -23,7 +23,9 @@ export default class CreateKnowledge extends React.Component {
 
   onChange = (event) => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value }, () => {
+      this.setState({ [name+"Error"]: (value.length > 0) ? false : 'Bu alan boş bırakılamaz' });
+    });
   }
 
   controlEmptiness = () => {
