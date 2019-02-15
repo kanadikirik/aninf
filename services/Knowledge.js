@@ -56,6 +56,21 @@ export class Knowledge {
     return knowledges;
   }
 
+  static paginate = async (startAfter, limit = 2) => {
+    let knowledges = false;
+    await Knowledge.collection().orderBy("createdAt","desc").startAfter(startAfter).limit(limit).get()
+    .then(async docs => {
+      if(docs.size > 0){
+        console.log(docs.docs)
+        knowledges = await Knowledge.buildMultiple(docs.docs);
+      } else {
+          knowledges = [];
+      }
+    })
+    .catch(err => console.error(err));
+    return knowledges;
+  }
+
   static update = async (id, title, summary, source) => {
     let status = false;
     const updatedAt = new Date();
