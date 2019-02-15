@@ -19,6 +19,14 @@ export class User {
     return new User(id, displayName, email, photoURL, type);
   }
 
+  static buildMultiple = (users) => {
+    let usersArray = [];
+    for(user of users){
+      usersArray.push(User.build(user));
+    }
+    return usersArray;
+  }
+
   static checkCurrent = (callback) => {
     firebase.auth().onAuthStateChanged(async (user) => {
       if(user){
@@ -61,6 +69,23 @@ export class User {
     await firebase.auth().signOut()
     .catch(err => { status = false; console.error(err) });
     return status;
+  }
+
+  static paginate = async (startAfter, limit = 10) => {
+    let users = false;
+    let query;
+    if(startAfter === 0) query = User.collection().orderBy('createdAt',"desc").limit(limit)
+    else query = User.collection().orderBy('createdAt',"desc").startAfter(startAfter).limit(limit)
+    await query.get()
+    .then(docs => {
+      if(docs.size > 0){
+        users = docs.docs;
+      } else {
+        users = [];
+      }
+    })
+    .catch(err => console.error(err));
+    return users
   }
 
   static create = async (user) => {
