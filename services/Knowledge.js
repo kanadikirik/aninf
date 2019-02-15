@@ -43,8 +43,9 @@ export class Knowledge {
   static getToday = async () => {
     let knowledges = false;
     const date = new Date();
-    const yesterday = new Date(date.getFullYear(), date.getMonth(), date.getDate()-1);
-    await Knowledge.collection().where("createdAt", ">", yesterday).get()
+    const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    console.log(today)
+    await Knowledge.collection().orderBy('createdAt', 'desc').startAt(date).endAt(today).get()
     .then(async docs => {
       if(docs.size > 0){
         knowledges = await Knowledge.buildMultiple(docs.docs);
