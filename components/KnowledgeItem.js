@@ -208,12 +208,12 @@ export default class KnowledgeItem extends Component {
 
 
   render() {
-    const { user, knowledge } = this.props;
+    const { user, knowledge, className } = this.props;
     const { isExtraVisible, deleted, isUpdateOpen, updationAnimation, updatedTitle, updatedTitleError, 
       updatedSource, updatedSourceError, updatedSummary, updatedSummaryError 
     }  = this.state;
     return (
-      <div className={`knowledge ${deleted ? "deletion-animate" : null} ${updationAnimation}`}>
+      <div className={`knowledge ${deleted ? "deletion-animate" : null} ${className} ${updationAnimation}`}>
         {this.deletionElement()}
         {this.reportingElement()}
         <div className="knowledge-header">
