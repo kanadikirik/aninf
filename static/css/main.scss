@@ -185,6 +185,7 @@ textarea{
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  transition: all 1s;
   @include space('margin', 'y', 5);
 }
 .knowledge-list-title{
@@ -202,15 +203,30 @@ textarea{
   border-radius: 1.3rem;
 }
 .knowledge{
+
   position: relative;
-  justify-content: space-between;
   width: 50%;
   @include space('margin', 'y', 3);
   @include space('padding', 'all', 4);
   border-radius: $border-radius;
   background-color: rgba($color: #F0F2F6, $alpha: 0.3);
+  transition: all 1s;
   h4{
     font-size: 1.1rem;
+  }
+  input, textarea{
+    border: 1px solid rgba($color: $blue, $alpha: 0.3);
+    @include space('margin', 'y', 3);
+    width: 95%;
+    &:focus{
+      border-color: $blue;
+    }
+    &::placeholder{
+      font-size: 0.9rem;
+    }
+  }
+  textarea{
+    height: 20vh;
   }
 }
 .knowledge-header{
@@ -233,7 +249,7 @@ textarea{
   justify-content: center;
   background-color: #F0F2F6;
   color: white;
-  transform: translateY(4rem) translateX(-1.5em);
+  transform: translateY(50%) translateX(-1.5em);
   right: 0;
   border-radius: $border-radius;
   transition: all 1s;
@@ -248,7 +264,7 @@ textarea{
     }
   }
 }
-.deletion{
+.knowledge-modal{
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -262,7 +278,7 @@ textarea{
   font-weight: bold;
   background-color: rgba($color: #F0F2F6, $alpha: 1)
 }
-.deletion-buttons{
+.knowledge-modal-buttons{
   display: flex;
   align-items: center;
   @include space('margin', 'top', 5);
@@ -279,6 +295,7 @@ textarea{
   @include space('padding', 'left', 3);
   @include space('margin', 'y', 3);
   margin-left: 0.60rem;
+
 }
 .knowledge-author{
   display: flex;
@@ -294,4 +311,16 @@ textarea{
   display: flex;
   align-items: center;
   margin-left: calc(1em - 0.75rem);
+}
+.update-buttons{
+  display: flex;
+  align-items: center;
+  @include space('margin', 'top', 3);
+  button:nth-child(2){
+    background-color: $blue;
+    color: white;
+    border-radius: 2rem;
+    font-weight: bold;
+    @include space('margin', 'left', 3);
+  }
 }

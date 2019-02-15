@@ -61,6 +61,22 @@ $border-slim: 1px solid #dee2e6!important;
   100% { transform: rotate(360deg); }
 }
 
+// after effects
+
+.deletion-animate{
+  background-color: $colorfull-pink;
+  transform: translateX(-200vw);
+  opacity: 0;
+  transition: all 2s;
+}
+.updation-animate{
+  color: white;
+  opacity: 0.3;
+  transform: scale(1.05);
+  background-color: rgba($color: $blue, $alpha: 1);
+  transition: all 1s;
+}
+
 // Modal
 .modal {
   position: fixed;

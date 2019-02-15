@@ -1,5 +1,5 @@
 // Services
-import { Knowledge } from "../services/Knwoledge";
+import { Knowledge } from "../services/Knowledge";
 // Components
 import { LoadingCircle } from './LoadingCircle';
 import CreateKnowledge from "./CreateKnowledge";
@@ -38,6 +38,13 @@ export default class KnowledgeList extends React.Component {
     this.setState({ knowledgesToday: [knowledge, ...knowledgesToday] });
   }
 
+  updateTodayKnowledge = (knowledge) => {
+    let { knowledgesToday } = this.state;
+    const index = knowledgesToday.findIndex(item => item.id === knowledge.id);
+    knowledgesToday[index] = knowledge;
+    this.setState({ knowledgesToday });
+  }
+
   setCreationModalVisibility = (value = !this.state.creationModalVisibility) => {
     this.setState({ creationModalVisibility: value });
   }
@@ -53,7 +60,7 @@ export default class KnowledgeList extends React.Component {
         } else {
           return (knowledgesToday.map(knowledge => {
             return (
-              <KnowledgeItem key={knowledge.id} user={this.props.user} knowledge={knowledge} remove={this.removeTodayKnowledge} />
+              <KnowledgeItem key={knowledge.id} user={this.props.user} knowledge={knowledge} remove={this.removeTodayKnowledge} update={this.updateTodayKnowledge} />
             )
           })
           )
