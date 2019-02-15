@@ -33,6 +33,11 @@ export default class KnowledgeList extends React.Component {
     this.setState({ knowledgesToday });
   }
 
+  addTodayKnowledge = (knowledge) => {
+    let { knowledgesToday } = this.state;
+    this.setState({ knowledgesToday: [knowledge, ...knowledgesToday] });
+  }
+
   setCreationModalVisibility = (value = !this.state.creationModalVisibility) => {
     this.setState({ creationModalVisibility: value });
   }
@@ -64,7 +69,7 @@ export default class KnowledgeList extends React.Component {
     const { creationModalVisibility } = this.state;
     return (
       <div className="knowledge-list">
-        { creationModalVisibility && <CreateKnowledge user={user} setVisibility={this.setCreationModalVisibility} /> }
+        { creationModalVisibility && <CreateKnowledge user={user} setVisibility={this.setCreationModalVisibility} add={this.addTodayKnowledge} /> }
         <div className="knowledge-list-title">
           <h2><span className="cf-blue">Bugün</span> anlatılanlar</h2>
           <button className="create-button" onClick={() => this.setCreationModalVisibility(true)}>

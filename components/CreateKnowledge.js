@@ -47,8 +47,11 @@ export default class CreateKnowledge extends React.Component {
       const author = this.props.user.id;
       const createdAt = new Date();
       const knowledge = {title, summary, source, createdAt, updatedAt: createdAt, author};
-      const status = await Knowledge.create(knowledge);
-      status ? await this.setState({ created: true }) : await this.setState({ creatingError: true });
+      const status = await Knowledge.create(knowledge); // if there is not error then status will be id
+      if(status){
+        await this.setState({ created: true });
+        this.props.add(new Knowledge(status, title, summary, source, createdAt, createdAt, this.props.user))
+      } else await this.setState({ creatingError: true });
       this.setState({ creating: false });
     }
   }
