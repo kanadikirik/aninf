@@ -2,17 +2,18 @@
 import { Knowledge } from "../services/Knwoledge";
 // Components
 import { LoadingCircle } from './LoadingCircle';
-// Icons
-import { FaPen, FaLink, FaTwitter, FaFacebook, FaWhatsapp, FaEllipsisH } from 'react-icons/fa';
 import CreateKnowledge from "./CreateKnowledge";
+import KnowledgeItem from './KnowledgeItem';
+// Icons
+import { FaPen } from 'react-icons/fa';
 
 export default class KnowledgeList extends React.Component {
   
   state={
-    knowledgesToday: [],
-    knowledgesTodayError: false,
-    knowledgesTodayLoaded: false,
-    creationModalVisibility: false,
+    knowledgesToday         : [],
+    knowledgesTodayError    : false,
+    knowledgesTodayLoaded   : false,
+    creationModalVisibility : false,
   }
 
   componentDidMount = async () => {
@@ -23,6 +24,13 @@ export default class KnowledgeList extends React.Component {
     const knowledgesToday = await Knowledge.getToday();
     knowledgesToday ? await this.setState({ knowledgesToday }) : await this.setState({ knowledgesTodayError: true });
     this.setState({ knowledgesTodayLoaded: true });
+  }
+
+  removeTodayKnowledge = (id) => {
+    let { knowledgesToday } = this.state;
+    const index = knowledgesToday.findIndex(item => item.id === id);
+    knowledgesToday.splice(index, 1);
+    this.setState({ knowledgesToday });
   }
 
   setCreationModalVisibility = (value = !this.state.creationModalVisibility) => {
@@ -40,25 +48,7 @@ export default class KnowledgeList extends React.Component {
         } else {
           return (knowledgesToday.map(knowledge => {
             return (
-              <div key={knowledge.id} className="knowledge">
-                  <div className="knowledge-author">
-                    <img src={knowledge.author.photoURL} alt={`aninf ${knowledge.author.displayName}`} />
-                    <p><span className="bold">{knowledge.author.displayName.split(" ")[0]}</span> anlattı:</p>
-                  </div>
-                  <div className="knowledge-body">
-                    <h4 className="bold mb-3">{knowledge.title}</h4>
-                    <p>{knowledge.summary}</p>
-                  </div>
-                  <div className="knowledge-source">
-                    <FaLink className="mr-3"/>
-                    <a href={knowledge.source} className="cf-blue">{knowledge.source}</a>
-                  </div>
-                <div className="knowledge-menu">
-                  <button><FaTwitter className="icon-lg cf-twitter" /></button>
-                  <button><FaFacebook className="icon-lg cf-facebook" /></button>
-                  <button><FaWhatsapp className="icon-lg cf-whatsapp" /></button>
-                </div>
-              </div>
+              <KnowledgeItem key={knowledge.id} user={this.props.user} knowledge={knowledge} remove={this.removeTodayKnowledge} />
             )
           })
           )
