@@ -2,6 +2,7 @@
 import { User } from '../services/User';
 // Components
 import { LoadingCircle } from './LoadingCircle'; 
+import AdminUserView     from './AdminUserView';
 
 export default class AdminUsers extends React.Component {
 
@@ -51,14 +52,7 @@ export default class AdminUsers extends React.Component {
                 {
                   users.map(user => {
                     return(
-                      <div key={user.id} className="admin-user-view">
-                          <img src={user.data().photoURL} />
-                          <div>
-                            <p className="bold">{user.data().displayName}</p>
-                            <p>{user.data().email}</p>
-                            <p>{user.id}</p>
-                          </div>
-                      </div>
+                      <AdminUserView key={user.id} user={user} />
                     )
                   })
                 }
