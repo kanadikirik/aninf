@@ -3,8 +3,8 @@ $border-radius-lg: 1rem;
 $shadow: 0 1rem 3rem rgba(0,0,0,.15);
 $shadow-lg: 0 1rem 3rem rgba($color: black, $alpha: .175);
 $shadow-sm: 0 .125rem .25rem rgba(0,0,0,.075);
-$shadow-pink: 0 1rem 3rem rgba($color: $colorfull-pink, $alpha: .15);
-$shadow-pink-lg: 0 1rem 3rem rgba($color: $colorfull-pink, $alpha: .175);
+$shadow-pink: 0 1rem 3rem rgba($color: $pink, $alpha: .15);
+$shadow-pink-lg: 0 1rem 3rem rgba($color: $pink, $alpha: .175);
 $border-slim: 1px solid #dee2e6!important;
  
 // Text
@@ -22,7 +22,7 @@ $border-slim: 1px solid #dee2e6!important;
 
 // border
 .border-red{
-  border-color: $colorfull-pink !important;
+  border-color: $pink !important;
 }
 
 // shadow
