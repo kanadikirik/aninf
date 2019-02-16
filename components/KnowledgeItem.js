@@ -32,6 +32,7 @@ export default class KnowledgeItem extends Component {
     reportingError      : false,
     reportDescription   : '',
   }
+  
 
   submitDeletion = async (id) => {
     this.setState({ deleting: true });
@@ -244,7 +245,7 @@ export default class KnowledgeItem extends Component {
               <input value={updatedTitle} name="updatedTitle" onChange={this.onChange} />
             </div>
           :
-            <h4 className="bold mb-3">{knowledge.title}</h4>
+            <h4 className="bold mb-3">{knowledge.dbObject.data().title}</h4>
           }
           {isUpdateOpen ? 
             <div>
@@ -252,7 +253,7 @@ export default class KnowledgeItem extends Component {
               <textarea value={updatedSummary} name="updatedSummary" onChange={this.onChange}/>
             </div>
           :
-            <p>{knowledge.summary}</p>
+            <p>{knowledge.dbObject.data().summary}</p>
           }
         </div>
         <div className="knowledge-source">
@@ -263,7 +264,7 @@ export default class KnowledgeItem extends Component {
               <input value={updatedSource} name="updatedSource" onChange={this.onChange} />
             </div>
           :
-            <a href={knowledge.source} className="cf-blue">{knowledge.source}</a>
+            <a href={knowledge.dbObject.data().source} className="cf-blue">{knowledge.dbObject.data().source}</a>
           }
         </div>
         { this.updateButtons() }

@@ -4,21 +4,14 @@ import { User } from './User';
 export class Knowledge {
   static collection = () => { return firebase.firestore().collection("knowledges") }
 
-  constructor(id, title, summary, source, createdAt, updatedAt, author){
-    this.id        = id;
-    this.title     = title;
-    this.summary   = summary;
-    this.source    = source;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt; 
+  constructor(dbObject, author){
+    this.dbObject  = dbObject; 
     this.author    = author;
   }
 
   static build = async (knowledge) => {
-    const { id } = knowledge;
-    let { title, summary, source, createdAt, updatedAt, author } = knowledge.data();
-    author = await User.findByID(author);
-    if(author) return new Knowledge(id, title, summary, source, createdAt, updatedAt, author);
+    const author = await User.findByID(knowledge.data().author);
+    if(author) return new Knowledge(knowledge, author);
     else return false;
   }
 
@@ -49,26 +42,48 @@ export class Knowledge {
   }
 
   static create = async (knowledge) => {
-    let status = false;
+    let createdKnowledge = false;
     await Knowledge.collection().add(knowledge)
-    .then((ref) => status = ref.id)
+    .then(async ref => {
+      await ref.get()
+      .then(async doc => createdKnowledge = await Knowledge.build(doc))
+      .catch(err => console.error(err));
+    })
     .catch(err => console.error(err))
-    return status;
+    return createdKnowledge;
   }
 
   static getToday = async () => {
     let knowledges = false;
     const date = new Date();
     const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    console.log(today)
     await Knowledge.collection().orderBy('createdAt', 'desc').startAt(date).endAt(today).get()
-    .then(async docs => {
+    .then(docs => {
       if(docs.size > 0){
-        knowledges = await Knowledge.buildMultiple(docs.docs);
+        knowledges = Knowledge.buildMultiple(docs.docs);
       } else {
         knowledges = [];
       }
     })
+    .catch(err => console.error(err));
+    return knowledges;
+  }
+
+  static getThisWeek = async (startAfter) => {
+    let knowledges = false;
+    const date = new Date();
+    if(startAfter === 0){
+      startAfter = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+    const previousWeek = new Date(date.getFullYear(), date.getMonth(), date.getDate()-7);
+    await Knowledge.collection().orderBy('createdAt',"desc").startAfter(startAfter).endAt(previousWeek).limit(10).get()
+    .then(docs => {
+     if(docs.size > 0){
+       knowledges = Knowledge.buildMultiple(docs.docs);
+     } else {
+       knowledges = [];
+     }
+    })  
     .catch(err => console.error(err));
     return knowledges;
   }
