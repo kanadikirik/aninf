@@ -10,14 +10,18 @@ import { FaPen } from 'react-icons/fa';
 export default class KnowledgeList extends React.Component {
   
   state={
-    knowledgesToday         : [],
-    knowledgesTodayError    : false,
-    knowledgesTodayLoaded   : false,
-    creationModalVisibility : false,
+    knowledgesToday           : [],
+    knowledgesTodayError      : false,
+    knowledgesTodayLoaded     : false,
+    knowledgesThisWeek        : [],
+    knowledgesThisWeekError   : false,
+    knowledgesThisWeekLoaded  : false,
+    creationModalVisibility   : false,
   }
 
   componentDidMount = async () => {
     await this.buildToday();
+    await this.buildThisWeek();
   }
   
   buildToday = async () => {
@@ -56,9 +60,38 @@ export default class KnowledgeList extends React.Component {
         return "Yüklenirken hata meydana geldi"
       } else {
         if(knowledgesToday.length === 0){
-          return "Bugün henüz bir şey anlatılmadı. İlk anlatan sen ol!"
+          return <h3 className="bold">Bugün henüz bir şey anlatılmadı. <span className="cf-blue">İlk anlatan sen ol!</span></h3>
         } else {
           return (knowledgesToday.map(knowledge => {
+            return (
+              <KnowledgeItem key={knowledge.id} user={this.props.user} knowledge={knowledge} remove={this.removeTodayKnowledge} update={this.updateTodayKnowledge} />
+            )
+          })
+          )
+        }
+      }
+    } else {
+      return <LoadingCircle />
+    }
+  }
+
+  buildThisWeek = async () => {
+    const knowledgesThisWeek = await Knowledge.getThisWeek(0);
+    knowledgesThisWeek ? await this.setState({ knowledgesThisWeek }) : await this.setState({ knowledgesThisWeekError: true });
+    this.setState({ knowledgesThisWeekLoaded: true });
+  }
+
+
+  thisWeekList = () => {
+    const { knowledgesThisWeek, knowledgesThisWeekError, knowledgesThisWeekLoaded } = this.state;
+    if(knowledgesThisWeekLoaded){
+      if(knowledgesThisWeekError){
+        return "Yüklenirken hata meydana geldi"
+      } else {
+        if(knowledgesThisWeek.length === 0){
+          return <h3 className="bold">Bugün henüz bir şey anlatılmadı. <span className="cf-blue">İlk anlatan sen ol!</span></h3>
+        } else {
+          return (knowledgesThisWeek.map(knowledge => {
             return (
               <KnowledgeItem key={knowledge.id} user={this.props.user} knowledge={knowledge} remove={this.removeTodayKnowledge} update={this.updateTodayKnowledge} />
             )
@@ -85,6 +118,8 @@ export default class KnowledgeList extends React.Component {
           </button>
         </div>
         {this.todayList()}
+        <h2><span className="cf-blue">Bu hafta</span> anlatılanlar</h2>
+        {this.thisWeekList()}
       </div>
     )
   }
