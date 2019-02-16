@@ -1,8 +1,3 @@
-@mixin padding($size) {
-  @if $size == 'normal'{
-    padding: 0.5rem;
-  }
-}
 @mixin space($type, $side, $size){ 
   $size: $size * 0.25rem;
   @if $side == 'all'{
