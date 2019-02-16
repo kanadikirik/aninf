@@ -11,12 +11,6 @@ export class Report {
     this.author       = author;
   }
 
-  build = (report) => {
-    const { id } = report;
-    const { description, reportedItem, createdAt, author } = report.data();
-    return new Report(id, description, reportedItem, createdAt, author);
-  }
-
   static create = async (report) => {
     let status = false;
     await Report.collection().add(report)
@@ -25,6 +19,21 @@ export class Report {
     return status;
   }
 
+  static findByID = async (id) => {
+    let report = false;
+    await Report.collection().doc(id).get()
+    .then(doc => report = doc)
+    .catch(err => console.error(err));
+    return report;
+  }
+
+  static filter = async (filter, filterValue) => {
+    let reports = false;
+    await Report.collection().where(filter,'==',filterValue).get()
+    .then(docs => reports = docs.docs)
+    .catch(err => console.error(err));
+    return reports;
+  }
   static paginate = async (startAfter, limit = 10) => {
     let reports = false;
     let query;
@@ -41,5 +50,6 @@ export class Report {
     .catch(err => console.error(err));
     return reports
   }
+
 
 }

@@ -40,6 +40,14 @@ export class Knowledge {
     return knowledge;
   }
 
+  static filter = async (filter, filterValue) => {
+    let knowledge = false;
+    await Knowledge.collection().where(filter,'==',filterValue).get()
+    .then(async doc => knowledge = await Knowledge.buildMultiple(doc.docs))
+    .catch(err => console.error(err));
+    return knowledge;
+  }
+
   static create = async (knowledge) => {
     let status = false;
     await Knowledge.collection().add(knowledge)

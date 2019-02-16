@@ -41,9 +41,17 @@ export class User {
   static findByID = async (id) => {
     let user = false;
     await User.collection().doc(id).get()
-    .then(doc => user = User.build(doc))
+    .then(doc => user = doc)
     .catch(err => console.error(err));
     return user;
+  }
+
+  static filter = async (filter, filterValue) => {
+    let users = false;
+    await User.collection().where(filter,'==',filterValue).get()
+    .then(docs => users = docs.docs)
+    .catch(err => console.error(err));
+    return users;
   }
 
   static signIn = async () => {
@@ -74,8 +82,8 @@ export class User {
   static paginate = async (startAfter, limit = 10) => {
     let users = false;
     let query;
-    if(startAfter === 0) query = User.collection().orderBy('createdAt',"desc").limit(limit)
-    else query = User.collection().orderBy('createdAt',"desc").startAfter(startAfter).limit(limit)
+    if(startAfter === 0) query = User.collection().orderBy('createdAt').limit(limit)
+    else query = User.collection().orderBy('createdAt').startAfter(startAfter).limit(limit)
     await query.get()
     .then(docs => {
       if(docs.size > 0){
