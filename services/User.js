@@ -15,8 +15,8 @@ export class User {
 
   static build = (user) => {
     const { id } = user;
-    const { displayName, email, photoURL, type } = user.data();
-    return new User(id, displayName, email, photoURL, type);
+    const { displayName, email, photoURL, type, createdAt } = user.data();
+    return new User(id, displayName, email, photoURL, type, createdAt);
   }
 
   static buildMultiple = (users) => {
@@ -90,9 +90,10 @@ export class User {
 
   static create = async (user) => {
     let newUser = false;
+    const createdAt = new Date();
     const { displayName, email, photoURL } = user;
     await User.collection().doc(user.uid).set({
-      displayName, email, photoURL, type: 1
+      displayName, email, photoURL, type: 1, createdAt
     })
     .then(() => newUser = true)
     .catch(err => console.error(err));
