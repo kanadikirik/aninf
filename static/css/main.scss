@@ -154,9 +154,16 @@ textarea{
     border-radius: 0;
     width: 100%;
     font-weight: bold;
+    justify-content: space-between;
+    svg{
+      color: $blue;
+    }
     &:hover{
       background-color: $blue;
-      color: white;
+      color: white !important;
+      svg{
+        color: white !important;
+      }
     }
   }
 }
