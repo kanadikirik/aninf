@@ -52,7 +52,7 @@ export default class AdminReports extends React.Component {
                 {
                   reports.map(report => {
                     return(
-                      <AdminReportView report={report} />
+                      <AdminReportView key={report.id} report={report} />
                     )
                   })
                 }
