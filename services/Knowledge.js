@@ -32,6 +32,14 @@ export class Knowledge {
     return buildedKnowledges;
   }
 
+  static findByID = async (id) => {
+    let knowledge = false;
+    await Knowledge.collection().doc(id).get()
+    .then(doc => knowledge = Knowledge.build(doc))
+    .catch(err => console.error(err));
+    return knowledge;
+  }
+
   static create = async (knowledge) => {
     let status = false;
     await Knowledge.collection().add(knowledge)
@@ -57,7 +65,7 @@ export class Knowledge {
     return knowledges;
   }
 
-  static paginate = async (startAfter, limit = 2) => {
+  static paginate = async (startAfter, limit = 5) => {
     let knowledges = false;
     await Knowledge.collection().orderBy("createdAt","desc").startAfter(startAfter).limit(limit).get()
     .then(async docs => {
