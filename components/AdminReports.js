@@ -2,19 +2,20 @@
 import { Report } from '../services/Report';
 // Components
 import { LoadingCircle } from './LoadingCircle'; 
+import AdminReportView   from './AdminReportView';
 
 export default class AdminReports extends React.Component {
 
   state={
-    reports: [],
+    reports         : [],
     reportsError    : false,
     reportsLoading  : true,
-    loadingMore : false,
+    loadingMore     : false,
     loadMoreMessage : 'Daha fazla yükle',
   }
 
   componentDidMount = async () => {
-    const reports = await Report.paginate(0, 2);
+    const reports = await Report.paginate(0, 5);
     if(!reports) this.setState({ reportsError: true })
     this.setState({ reports, reportsLoading: false });
   }
@@ -22,10 +23,10 @@ export default class AdminReports extends React.Component {
   loadMore = async () => {
     this.setState({ loadingMore: true });
     const { reports } = this.state;
-    const morereports = await Report.paginate(reports[reports.length-1], 2);
-    if(morereports){
-      if(morereports.length > 0){
-        this.setState({ reports: [...reports, ...morereports], loadMoreMessage: 'Daha fazla göster' })
+    const moreReports = await Report.paginate(reports[reports.length-1], 5);
+    if(moreReports){
+      if(moreReports.length > 0){
+        this.setState({ reports: [...reports, ...moreReports], loadMoreMessage: 'Daha fazla göster' })
       } else {
         this.setState({ loadMoreMessage: 'Gösterilecek daha fazla şikayet yok' })
       }
@@ -51,9 +52,7 @@ export default class AdminReports extends React.Component {
                 {
                   reports.map(report => {
                     return(
-                      <div key={report.id} className="admin-report-view">
-                        <p>{report.data().description}</p>
-                      </div>
+                      <AdminReportView report={report} />
                     )
                   })
                 }
