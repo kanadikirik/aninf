@@ -1,0 +1,44 @@
+@import './main.scss';
+
+.admin{
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  h2{
+    color: $blue;
+  }
+}
+.admin-content{
+  display: flex;
+  justify-content: space-between;
+}
+.admin-knowledges{
+  width: 35%;
+}
+.admin-knowledges-list{
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.admin-knowledge{
+  width: 90% !important; 
+}
+.admin-users, .admin-reports{
+  width: 30%;
+}
+.admin-users-list, .admin-reports-list{
+  display: flex;
+  flex-direction: column;
+}
+.admin-user-view{
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  @include space('margin', 'y', 3);
+  img{
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    @include space('margin', 'right', 3);
+  }
+}
