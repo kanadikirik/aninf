@@ -6,15 +6,15 @@ import { LoadingCircle } from './LoadingCircle';
 export default class AdminUsers extends React.Component {
 
   state={
-    users: [],
-    usersError    : false,
-    usersLoading  : true,
-    loadingMore : false,
+    users           : [],
+    usersError      : false,
+    usersLoading    : true,
+    loadingMore     : false,
     loadMoreMessage : 'Daha fazla yükle',
   }
 
   componentDidMount = async () => {
-    const users = await User.paginate(0, 2);
+    const users = await User.paginate(0, 5);
     if(!users) this.setState({ usersError: true })
     this.setState({ users, usersLoading: false });
   }
@@ -22,7 +22,7 @@ export default class AdminUsers extends React.Component {
   loadMore = async () => {
     this.setState({ loadingMore: true });
     const { users } = this.state;
-    const moreUsers = await User.paginate(users[users.length-1], 2);
+    const moreUsers = await User.paginate(users[users.length-1], 5);
     if(moreUsers){
       if(moreUsers.length > 0){
         this.setState({ users: [...users, ...moreUsers], loadMoreMessage: 'Daha fazla göster' })
@@ -52,8 +52,12 @@ export default class AdminUsers extends React.Component {
                   users.map(user => {
                     return(
                       <div key={user.id} className="admin-user-view">
-                        <img src={user.data().photoURL} />
-                        <p>{user.data().displayName}</p>
+                          <img src={user.data().photoURL} />
+                          <div>
+                            <p className="bold">{user.data().displayName}</p>
+                            <p>{user.data().email}</p>
+                            <p>{user.id}</p>
+                          </div>
                       </div>
                     )
                   })
