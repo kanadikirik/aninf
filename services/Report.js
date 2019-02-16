@@ -25,4 +25,21 @@ export class Report {
     return status;
   }
 
+  static paginate = async (startAfter, limit = 10) => {
+    let reports = false;
+    let query;
+    if(startAfter === 0) query = Report.collection().orderBy('createdAt').limit(limit)
+    else query = Report.collection().orderBy('createdAt').startAfter(startAfter).limit(limit)
+    await query.get()
+    .then(docs => {
+      if(docs.size > 0){
+        reports = docs.docs;
+      } else {
+        reports = [];
+      }
+    })
+    .catch(err => console.error(err));
+    return reports
+  }
+
 }
