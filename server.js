@@ -12,6 +12,11 @@ app.prepare().then(() => {
 		return app.render(req, res, '/Admin', mergedQuery);
 	})
 
+	server.get('/iletisim', (req, res) => {
+		const mergedQuery = Object.assign({}, req.query, req.params);
+		return app.render(req, res, '/Contact', mergedQuery);
+	})
+
 	// This is the default route, don't edit this.
 	server.get('*', (req, res) => {
 		return handle(req, res);
