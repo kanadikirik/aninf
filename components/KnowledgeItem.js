@@ -218,8 +218,8 @@ export default class KnowledgeItem extends Component {
         {this.reportingElement()}
         <div className="knowledge-header">
           <div className="knowledge-author">
-            <img src={knowledge.author.photoURL} alt={`aninf ${knowledge.author.displayName}`} />
-            <p><span className="bold">{knowledge.author.displayName.split(" ")[0]}</span> anlattı:</p>
+            <img src={knowledge.author.data().photoURL} alt={`aninf ${knowledge.author.displayName}`} />
+            <p><span className="bold">{knowledge.author.data().displayName.split(" ")[0]}</span> anlattı:</p>
           </div>
           <button className="p-0" onClick={this.handleExtraVisible}><FaEllipsisH /></button>
           {
