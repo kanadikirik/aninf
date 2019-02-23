@@ -19,11 +19,11 @@ export default class KnowledgeItem extends Component {
     updating            : false,
     updated             : false,
     updationError       : false,
-    updatedTitle        : this.props.knowledge.title,
+    updatedTitle        : this.props.knowledge.dbObject.data().title,
     updatedTitleError   : false,
-    updatedSummary      : this.props.knowledge.summary,
+    updatedSummary      : this.props.knowledge.dbObject.data().summary,
     updatedSummaryError : false,
-    updatedSource       : this.props.knowledge.source,
+    updatedSource       : this.props.knowledge.dbObject.data().source,
     updatedSourceError  : false,
     updationAnimation   : '',
     reportingOpen       : false,
@@ -32,6 +32,12 @@ export default class KnowledgeItem extends Component {
     reportingError      : false,
     reportDescription   : '',
   }
+
+  componentDidMount = () => {
+    console.log(this.props.knowledge.dbObject.data())
+    
+  }
+  
   
 
   submitDeletion = async (id) => {
@@ -69,7 +75,7 @@ export default class KnowledgeItem extends Component {
               <p>İçeriği silmek istediğine emin misin?</p>
               <div className="knowledge-modal-buttons">
                 <button onClick={this.closeDeletion}><FaLongArrowAltLeft className="mr-3"/> Vazgeç</button>
-                <button onClick={() => this.submitDeletion(this.props.knowledge.id)}>Eminim!</button>
+                <button onClick={() => this.submitDeletion(this.props.knowledge.dbObject.id)}>Eminim!</button>
               </div>
             </div>
           )
@@ -84,16 +90,12 @@ export default class KnowledgeItem extends Component {
     const { updatedTitle, updatedTitleError, updatedSummary, updatedSummaryError, updatedSource, updatedSourceError } = this.state;
     if( !updatedTitleError && !updatedSummaryError && !updatedSourceError ){
       await this.setState({ updating: true })
-      const status = await Knowledge.update(this.props.knowledge.id, updatedTitle, updatedSummary, updatedSource);
-      if(!status) await this.setState({ updationError: true });
+      const updatedKnowledge = await Knowledge.update(this.props.knowledge.dbObject.id, updatedTitle, updatedSummary, updatedSource);
+      if(!updatedKnowledge) await this.setState({ updationError: true });
       else{
         await this.updationAnimate();
-        let { knowledge }   = this.props;
-        knowledge.updatedAt = new Date();
-        knowledge.title     = updatedTitle;
-        knowledge.summary   = updatedSummary;
-        knowledge.source    = updatedSource;
-        this.props.update(knowledge);
+        console.log(updatedKnowledge.dbObject.data())
+        this.props.update(updatedKnowledge);
       }
       this.setState({ updated: true, isUpdateOpen: false, updating: false });
     }
@@ -189,7 +191,7 @@ export default class KnowledgeItem extends Component {
   submitReport = async () => {
     this.setState({ reporting: true });
     const description = this.state.reportDescription;
-    const reportedItem = this.props.knowledge.id;
+    const reportedItem = this.props.knowledge.dbObject.id;
     const author = this.props.user.id;
     const createdAt = new Date();
     const report = { description, reportedItem, author, createdAt}
@@ -205,6 +207,25 @@ export default class KnowledgeItem extends Component {
   
   closeReporting = () => {
     this.setState({ reportingOpen: false })
+  }
+
+  extraButtons = () => {
+    const { user, knowledge } = this.props;
+    if(user.id === knowledge.author.id || knowledge.author.data().type === 0){
+      return(
+        <div className="knowledge-extra">
+          <button onClick={this.openDeletion}>Sil</button>
+          <button onClick={this.openUpdate}>Düzenle</button>
+          <button onClick={this.openReporting}>Şikayet et</button>
+        </div>
+      )
+    } else {
+      return(
+        <div className="knowledge-extra">
+          <button onClick={this.openReporting}>Şikayet et</button>
+        </div>
+      )
+    }
   }
 
 
@@ -223,20 +244,7 @@ export default class KnowledgeItem extends Component {
             <p><span className="bold">{knowledge.author.data().displayName.split(" ")[0]}</span> anlattı:</p>
           </div>
           <button className="p-0" onClick={this.handleExtraVisible}><FaEllipsisH /></button>
-          {
-            isExtraVisible &&
-            <div className="knowledge-extra">
-              { 
-                (user.id === knowledge.author.id || user.type === 0) &&
-                <button onClick={this.openDeletion} className="">Sil</button> 
-              }
-              { 
-                (user.id === knowledge.author.id || user.type === 0) &&
-                <button onClick={this.openUpdate}>Düzenle</button> 
-              }
-              <button onClick={this.openReporting}>Şikayet et</button>
-            </div>
-          }
+          { isExtraVisible && this.extraButtons() }
         </div>
         <div className={`knowledge-body`}>
           {isUpdateOpen ? 
@@ -268,11 +276,6 @@ export default class KnowledgeItem extends Component {
           }
         </div>
         { this.updateButtons() }
-        <div className="knowledge-menu">
-          <button><FaTwitter className="icon-lg cf-twitter" /></button>
-          <button><FaFacebook className="icon-lg cf-facebook" /></button>
-          <button><FaWhatsapp className="icon-lg cf-whatsapp" /></button>
-        </div>
       </div>
     )
   }
