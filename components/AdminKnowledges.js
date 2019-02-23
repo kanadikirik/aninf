@@ -24,7 +24,7 @@ export default class AdminKnowledges extends React.Component {
 
   removeKnowledge = (id) => {
     let { knowledges } = this.state;
-    const index = knowledges.findIndex(item => item.id === id);
+    const index = knowledges.findIndex(item => item.data().id === id);
     knowledges.splice(index, 1);
     this.setState({ knowledges });
   }
@@ -61,7 +61,7 @@ export default class AdminKnowledges extends React.Component {
                     knowledges.map(knowledge => {
                       return (
                               <KnowledgeItem 
-                                key       = {knowledge.id} 
+                                key       = {knowledge.dbObject.id} 
                                 user      = {this.props.user} 
                                 knowledge = {knowledge} 
                                 remove    = {this.removeKnowledge} 
