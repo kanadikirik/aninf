@@ -1,11 +1,11 @@
 import firebase from 'firebase';
 let config = {
-  apiKey: "AIzaSyAOvbVU6UBAIKqFhUSfkpO-eFPWAbvNF0A",
-  authDomain: "ingilizcenitasarla.firebaseapp.com",
-  databaseURL: "https://ingilizcenitasarla.firebaseio.com",
-  projectId: "ingilizcenitasarla",
-  storageBucket: "ingilizcenitasarla.appspot.com",
-  messagingSenderId: "899393357066"
+  apiKey: "AIzaSyDu0-sXbkauN6X5Yjw7yiH3PB3L_Dc_BJk",
+  authDomain: "aninfdotcom.firebaseapp.com",
+  databaseURL: "https://aninfdotcom.firebaseio.com",
+  projectId: "aninfdotcom",
+  storageBucket: "aninfdotcom.appspot.com",
+  messagingSenderId: "936824385421"
 };
 !firebase.apps.length ? firebase.initializeApp(config) : null;
 export default firebase;
