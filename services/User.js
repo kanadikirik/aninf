@@ -13,20 +13,6 @@ export class User {
     this.type         = type
   }
 
-  static build = (user) => {
-    const { id } = user;
-    const { displayName, email, photoURL, type, createdAt } = user.data();
-    return new User(id, displayName, email, photoURL, type, createdAt);
-  }
-
-  static buildMultiple = (users) => {
-    let usersArray = [];
-    for(user of users){
-      usersArray.push(User.build(user));
-    }
-    return usersArray;
-  }
-
   static checkCurrent = (callback) => {
     firebase.auth().onAuthStateChanged(async (user) => {
       if(user){
