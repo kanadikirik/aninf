@@ -1,6 +1,6 @@
 import Link from 'next/link';
 // Icons
-import { FaAngleDown, FaAngleUp, FaSignOutAlt, FaPen, FaArchive } from 'react-icons/fa';
+import { FaAngleDown, FaAngleUp, FaSignOutAlt, FaPen, FaArchive, FaBars } from 'react-icons/fa';
 
 export default class Navbar extends React.Component {
 
@@ -14,12 +14,11 @@ export default class Navbar extends React.Component {
 
   menuElement = () => {
     const { isMenuOpen } = this.state;
+    const { signOut } = this.props;
     if(isMenuOpen){
       return(
         <div className="navbar-menu">
-          <button >Anlattıklarım <FaArchive/></button>
-          <button>Hemen anlat <FaPen/></button>
-          <button>Çıkış yap <FaSignOutAlt/></button>
+          <button onClick={signOut}>Çıkış yap <FaSignOutAlt/></button>
         </div>
       )
     } else {
@@ -34,8 +33,7 @@ export default class Navbar extends React.Component {
       <div className="navbar">
         <Link href="/"><a className="m-0"><h1 className="logo">aninf</h1></a></Link>
         <div className="navbar-nav">
-          <Link href="/"><a>Ana sayfa</a></Link>
-          <Link href="/iletisim"><a>İletişim</a></Link>
+
           { user && 
               <div>
                 <button className="navbar-user" onClick={this.handleMenuOpen}>

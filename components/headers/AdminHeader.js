@@ -4,10 +4,10 @@ import AdminSearch     from '../AdminSearch';
 
 export default class AdminHeader extends React.Component {
   render() {
-    const { user } = this.props;
+    const { user, signOut } = this.props;
     return (
       <div className="admin-header">
-        <Navbar user={user} />
+        <Navbar user={user} signOut={signOut} />
         <div className="admin-header-content">
           <AdminSearch />
         </div>
