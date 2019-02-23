@@ -58,9 +58,9 @@ export class Knowledge {
     const date = new Date();
     const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     await Knowledge.collection().orderBy('createdAt', 'desc').startAt(date).endAt(today).get()
-    .then(docs => {
+    .then(async docs => {
       if(docs.size > 0){
-        knowledges = Knowledge.buildMultiple(docs.docs);
+        knowledges = await Knowledge.buildMultiple(docs.docs);
       } else {
         knowledges = [];
       }
@@ -77,9 +77,9 @@ export class Knowledge {
     }
     const previousWeek = new Date(date.getFullYear(), date.getMonth(), date.getDate()-7);
     await Knowledge.collection().orderBy('createdAt',"desc").startAfter(startAfter).endAt(previousWeek).limit(10).get()
-    .then(docs => {
+    .then(async docs => {
      if(docs.size > 0){
-       knowledges = Knowledge.buildMultiple(docs.docs);
+       knowledges = await Knowledge.buildMultiple(docs.docs);
      } else {
        knowledges = [];
      }
@@ -104,14 +104,18 @@ export class Knowledge {
   }
 
   static update = async (id, title, summary, source) => {
-    let status = false;
+    let updatedKnowledge = false;
     const updatedAt = new Date();
     await Knowledge.collection().doc(id).update({
       title, summary, source, updatedAt
     })
-    .then(() => status = true)
-    .catch((err) => console.error(err));
-    return status
+    .then(async () => {
+      await Knowledge.collection().doc(id).get()
+      .then(async doc => updatedKnowledge = await Knowledge.build(doc))
+      .catch(err => console.error(err))
+    })
+    .catch(err => console.error(err));
+    return updatedKnowledge;
   }
 
   static delete = async (id) => {

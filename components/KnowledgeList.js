@@ -32,7 +32,7 @@ export default class KnowledgeList extends React.Component {
 
   removeTodayKnowledge = (id) => {
     let { knowledgesToday } = this.state;
-    const index = knowledgesToday.findIndex(item => item.id === id);
+    const index = knowledgesToday.findIndex(item => item.dbObject.id === id);
     knowledgesToday.splice(index, 1);
     this.setState({ knowledgesToday });
   }
@@ -44,7 +44,7 @@ export default class KnowledgeList extends React.Component {
 
   updateTodayKnowledge = (knowledge) => {
     let { knowledgesToday } = this.state;
-    const index = knowledgesToday.findIndex(item => item.id === knowledge.id);
+    const index = knowledgesToday.findIndex(item => item.dbObject.id === knowledge.dbObject.id);
     knowledgesToday[index] = knowledge;
     this.setState({ knowledgesToday });
   }
@@ -60,11 +60,11 @@ export default class KnowledgeList extends React.Component {
         return "Yüklenirken hata meydana geldi"
       } else {
         if(knowledgesToday.length === 0){
-          return <h3 className="bold">Bugün henüz bir şey anlatılmadı. <span className="cf-blue">İlk anlatan sen ol!</span></h3>
+          return <h3 className="bold ta-center">Bugün henüz bir şey anlatılmadı. <span className="cf-blue">İlk anlatan sen ol!</span></h3>
         } else {
           return (knowledgesToday.map(knowledge => {
             return (
-              <KnowledgeItem key={knowledge.id} user={this.props.user} knowledge={knowledge} remove={this.removeTodayKnowledge} update={this.updateTodayKnowledge} />
+              <KnowledgeItem key={knowledge.dbObject.id} user={this.props.user} knowledge={knowledge} remove={this.removeTodayKnowledge} update={this.updateTodayKnowledge} />
             )
           })
           )
@@ -81,6 +81,19 @@ export default class KnowledgeList extends React.Component {
     this.setState({ knowledgesThisWeekLoaded: true });
   }
 
+  removeThisWeekKnowledge = (id) => {
+    let { knowledgesThisWeek } = this.state;
+    const index = knowledgesThisWeek.findIndex(item => item.dbObject.id === id);
+    knowledgesThisWeek.splice(index, 1);
+    this.setState({ knowledgesThisWeek });
+  }
+
+  updateThisWeekKnowledge = (knowledge) => {
+    let { knowledgesThisWeek } = this.state;
+    const index = knowledgesThisWeek.findIndex(item => item.dbObject.id === knowledge.dbObject.id);
+    knowledgesThisWeek[index] = knowledge;
+    this.setState({ knowledgesThisWeek });
+  }
 
   thisWeekList = () => {
     const { knowledgesThisWeek, knowledgesThisWeekError, knowledgesThisWeekLoaded } = this.state;
@@ -89,11 +102,11 @@ export default class KnowledgeList extends React.Component {
         return "Yüklenirken hata meydana geldi"
       } else {
         if(knowledgesThisWeek.length === 0){
-          return <h3 className="bold">Bugün henüz bir şey anlatılmadı. <span className="cf-blue">İlk anlatan sen ol!</span></h3>
+          return <h3 className="bold">Bu hafta anlatılan bir şey yok gibi gözüküyor. <span className="cf-blue">İlk anlatan sen ol!</span></h3>
         } else {
           return (knowledgesThisWeek.map(knowledge => {
             return (
-              <KnowledgeItem key={knowledge.id} user={this.props.user} knowledge={knowledge} remove={this.removeTodayKnowledge} update={this.updateTodayKnowledge} />
+              <KnowledgeItem key={knowledge.dbObject.id} user={this.props.user} knowledge={knowledge} remove={this.removeThisWeekKnowledge} update={this.updateThisWeekKnowledge} />
             )
           })
           )
@@ -105,20 +118,20 @@ export default class KnowledgeList extends React.Component {
   }
   
   render() {
-    const { user } = this.props;
+    const { user, signIn } = this.props;
     const { creationModalVisibility } = this.state;
     return (
       <div className="knowledge-list">
-        { creationModalVisibility && <CreateKnowledge user={user} setVisibility={this.setCreationModalVisibility} add={this.addTodayKnowledge} /> }
         <div className="knowledge-list-title">
           <h2><span className="cf-blue">Bugün</span> anlatılanlar</h2>
-          <button className="create-button" onClick={() => this.setCreationModalVisibility(true)}>
+          <button className="create-button" onClick={() => this.setCreationModalVisibility(!this.state.creationModalVisibility)}>
             Hemen anlat
             <FaPen className="icon-lg ml-3" />
           </button>
         </div>
+        { creationModalVisibility && <CreateKnowledge user={user} signIn={signIn} setVisibility={this.setCreationModalVisibility} add={this.addTodayKnowledge} /> }
         {this.todayList()}
-        <h2><span className="cf-blue">Bu hafta</span> anlatılanlar</h2>
+        <h2 className="my-5"><span className="cf-blue">Bu hafta</span> anlatılanlar</h2>        
         {this.thisWeekList()}
       </div>
     )
