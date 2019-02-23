@@ -1,10 +1,9 @@
 // Services
 import { Knowledge } from "../services/Knowledge";
 // Components
-import Modal from './Modal';
 import { LoadingCircle } from './LoadingCircle';
 // Icons
-import { FaLongArrowAltLeft, FaLongArrowAltRight } from 'react-icons/fa';
+import { FaLongArrowAltLeft, FaLongArrowAltRight, FaGoogle } from 'react-icons/fa';
 
 export default class CreateKnowledge extends React.Component {
 
@@ -63,13 +62,13 @@ export default class CreateKnowledge extends React.Component {
     return(
       <div className="creation-form">
         <h3 className="mb-3">Bugün ne öğrendin?</h3>
-        <span>Başlık</span>
+        <span className="bold">Başlık</span>
         {titleError && <span className="error-text">{titleError}</span>}
         <input name="title" onChange={this.onChange} className={titleError && "border-red"} placeholder="Öğrendiğin konunun başlığı nedir?" />
-        <span>Özet</span>
+        <span className="bold">Özet</span>
         {summaryError && <span className="error-text">{summaryError}</span>}
         <textarea name="summary" onChange={this.onChange} className={summaryError && "border-red"} placeholder="Öğrendiğini özetleyebilir misin?" />
-        <span>Kaynak</span>
+        <span className="bold">Kaynak</span>
         {sourceError && <span className="error-text">{sourceError}</span>}
         <input name="source" onChange={this.onChange} className={sourceError && "border-red"} placeholder="Bu bilgiyi nereden edindin?" />
         { this.state.creating ?           
@@ -129,22 +128,31 @@ export default class CreateKnowledge extends React.Component {
   }
 
   render() {
+    const { user, signIn } = this.props;
     const { creatingError, created } = this.state;
 
-    if(creatingError){
-      this.element = this.createdFailure();
-    } else if(created){
-      this.element = this.createdSuccessfully();
+    if(user){
+      if(creatingError){
+        this.element = this.createdFailure();
+      } else if(created){
+        this.element = this.createdSuccessfully();
+      } else {
+        this.element = this.creationForm();
+      }
     } else {
-      this.element = this.creationForm();
+      this.element = <div className="login-buttons">
+        <p className="bold">Bir şeyler anlatabilmek için önce giriş yapmalısın.</p>
+        <button onClick={signIn} className="google-login-button">
+          <FaGoogle className="icon mr-2" />
+          Google ile oturum aç
+        </button>
+      </div>
     }
 
     return (
-      <Modal>
-        <div className="create-knowledge">
-          {this.element}
-        </div>
-      </Modal>
+      <div className="create-knowledge">
+        {this.element}
+      </div>
     )
   }
 }
