@@ -66,15 +66,15 @@ export default class AdminReportView extends React.Component {
             </div>
             <div className="admin-report-knowledge">
               <div className="admin-report-knowledge-author">
-                <p className="bold">{reportedItem.title}</p>
-                <p className="my-3">{reportedItem.summary}</p>
-                <p>{reportedItem.source}</p>
-                <p>{reportedItem.id}</p>
+                <p className="bold">{reportedItem.dbObject.data().title}</p>
+                <p className="my-3">{reportedItem.dbObject.data().summary}</p>
+                <p>{reportedItem.dbObject.data().source}</p>
+                <p>{reportedItem.dbObject.id}</p>
               </div>
               <div className="my-3">
-                <p className="bold">{reportedItem.author.displayName}</p>
-                <p>{reportedItem.author.email}</p>
-                <p>{reportedItem.author.id}</p>
+                <p className="bold">{reportedItem.dbObject.data().author.displayName}</p>
+                <p>{reportedItem.dbObject.data().author.email}</p>
+                <p>{reportedItem.dbObject.data().author.id}</p>
               </div>
             </div>
           </div>
