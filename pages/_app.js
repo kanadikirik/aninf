@@ -1,7 +1,6 @@
 import React from 'react'
 import App, { Container } from 'next/app'
 import '../static/css/main.scss'
-
 // Services
 import { User } from '../services/User';
 
@@ -30,6 +29,11 @@ export default class MyApp extends App {
     if(user) this.setState({ user });
   }
 
+  signOut = async () => {
+    const user = await User.signOut()
+    if(user) this.setState({ user: false })
+  }
+
   checkCurrentUser = async () => {
     User.checkCurrent(async user => {
       if(user) await this.setState({ user });
@@ -42,7 +46,7 @@ export default class MyApp extends App {
     const { loaded, user } = this.state;
     return (
       <Container>
-        <Component loaded={loaded} user={user} signIn={this.signIn} {...pageProps} />
+        <Component loaded={loaded} user={user} signIn={this.signIn} signOut={this.signOut} {...pageProps} />
       </Container>
     )
   }
