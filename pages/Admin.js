@@ -3,9 +3,9 @@ import Head from 'next/head'
 import { User } from '../services/User';
 // Components
 import AdminHeader     from '../components/headers/AdminHeader';
-import AdminKnowledges from '../components/AdminKnowledges';
-import AdminUsers      from '../components/AdminUsers';
-import AdminReports    from '../components/AdminReports';
+import AdminKnowledges from '../components/admin/AdminKnowledges';
+import AdminUsers      from '../components/admin/AdminUsers';
+import AdminReports    from '../components/admin/AdminReports';
 // Styles
 import '../static/css/admin.scss';
 

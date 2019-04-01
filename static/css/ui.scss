@@ -232,3 +232,12 @@ $check-length: 36px;
   }
 }
 
+@media screen and (max-width: 720px){
+  .modal-content{
+    width: 90%;
+  }
+  .created-successfully, .created-failure{
+    width: 90%;
+  }
+}
+

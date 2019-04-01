@@ -28,7 +28,13 @@ export class Knowledge {
   static findByID = async (id) => {
     let knowledge = false;
     await Knowledge.collection().doc(id).get()
-    .then(doc => knowledge = Knowledge.build(doc))
+    .then(doc => {
+      if(doc.exists){
+        knowledge = Knowledge.build(doc)
+      } else {
+        knowledge = null;
+      }
+    })
     .catch(err => console.error(err));
     return knowledge;
   }
@@ -53,6 +59,26 @@ export class Knowledge {
     return createdKnowledge;
   }
 
+  static getRandom = async () => {
+    let knowledge = false;
+    const randomID = await Knowledge.collection().doc();
+    await Knowledge.collection().where(firebase.firestore.FieldPath.documentId(), ">=", randomID).limit(1).get()
+    .then(async doc => {
+      if(doc.size > 0) knowledge = doc.docs[0];
+      else{
+        await Knowledge.collection().where(firebase.firestore.FieldPath.documentId(), "<=", randomID).limit(1).get()
+        .then(async otherDoc => { 
+          if(doc.size > 0) knowledge = otherDoc.docs[0]; 
+          else {
+            knowledge = await Knowledge.getRandom();
+          }
+        })
+        .catch(err => console.error(err))
+      }
+    }).catch(err => console.error(err))
+    return knowledge;
+  }
+
   static getToday = async () => {
     let knowledges = false;
     const date = new Date();
@@ -64,42 +90,33 @@ export class Knowledge {
       } else {
         knowledges = [];
       }
-    })
-    .catch(err => console.error(err));
+    }).catch(err => console.error(err));
     return knowledges;
   }
-
-  static getThisWeek = async (startAfter) => {
+  
+  static get = async (limit = 6) => {
     let knowledges = false;
-    const date = new Date();
-    if(startAfter === 0){
-      startAfter = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    }
-    const previousWeek = new Date(date.getFullYear(), date.getMonth(), date.getDate()-7);
-    await Knowledge.collection().orderBy('createdAt',"desc").startAfter(startAfter).endAt(previousWeek).limit(10).get()
+    await Knowledge.collection().orderBy("createdAt", "desc").limit(limit).get()
     .then(async docs => {
-     if(docs.size > 0){
-       knowledges = await Knowledge.buildMultiple(docs.docs);
-     } else {
-       knowledges = [];
-     }
-    })  
-    .catch(err => console.error(err));
+      if(docs.empty){
+        knowledges = [];
+      } else {
+        knowledges = await Knowledge.buildMultiple(docs.docs);
+      }
+    }).catch(err => console.error(err));
     return knowledges;
   }
-
+  
   static paginate = async (startAfter, limit = 5) => {
     let knowledges = false;
     await Knowledge.collection().orderBy("createdAt","desc").startAfter(startAfter).limit(limit).get()
     .then(async docs => {
       if(docs.size > 0){
-        console.log(docs.docs)
         knowledges = await Knowledge.buildMultiple(docs.docs);
       } else {
-          knowledges = [];
+        knowledges = [];
       }
-    })
-    .catch(err => console.error(err));
+    }).catch(err => console.error(err));
     return knowledges;
   }
 
@@ -125,4 +142,13 @@ export class Knowledge {
     .catch(err => console.error(err));
     return status;
   }
+
+  static try = async () => {
+    await Knowledge.collection().get()
+    .then(docs => {
+      
+    })
+  }
+
 }
+

@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
+import Link from 'next/link';
 // Services
-import { Knowledge } from '../services/Knowledge';
+import { Knowledge } from '../../services/Knowledge';
+import { Report } from '../../services/Report';
 // Components
-import { LoadingCircle } from './LoadingCircle';
+import { LoadingCircle } from '../LoadingCircle';
 // Icons
-import { FaLongArrowAltLeft, FaLongArrowAltRight, FaLink, FaTwitter, FaFacebook, FaWhatsapp, FaEllipsisH } from 'react-icons/fa';
-import { Report } from '../services/Report';
+import { FaLongArrowAltLeft, FaLongArrowAltRight, FaLink, FaTwitter, FaFacebook, FaWhatsapp, FaEllipsisH, FaLess } from 'react-icons/fa';
 
-export default class KnowledgeItem extends Component {
+export default class KnowledgeItem extends React.Component {
 
   state={
     isExtraVisible      : false,
@@ -31,14 +31,8 @@ export default class KnowledgeItem extends Component {
     reported            : false,
     reportingError      : false,
     reportDescription   : '',
+    reportDescriptionError: false,
   }
-
-  componentDidMount = () => {
-    console.log(this.props.knowledge.dbObject.data())
-    
-  }
-  
-  
 
   submitDeletion = async (id) => {
     this.setState({ deleting: true });
@@ -88,16 +82,19 @@ export default class KnowledgeItem extends Component {
 
   submitUpdate = async () => {
     const { updatedTitle, updatedTitleError, updatedSummary, updatedSummaryError, updatedSource, updatedSourceError } = this.state;
-    if( !updatedTitleError && !updatedSummaryError && !updatedSourceError ){
-      await this.setState({ updating: true })
-      const updatedKnowledge = await Knowledge.update(this.props.knowledge.dbObject.id, updatedTitle, updatedSummary, updatedSource);
-      if(!updatedKnowledge) await this.setState({ updationError: true });
-      else{
-        await this.updationAnimate();
-        console.log(updatedKnowledge.dbObject.data())
-        this.props.update(updatedKnowledge);
+    if(updatedSummary.length < 50){
+      this.setState({ updatedSummaryError: "Özet en az 50 karakter uzunluğunda olmalıdır!" })
+    } else {
+      if( !updatedTitleError && !updatedSummaryError && !updatedSourceError ){
+        await this.setState({ updating: true })
+        const updatedKnowledge = await Knowledge.update(this.props.knowledge.dbObject.id, updatedTitle, updatedSummary, updatedSource);
+        if(!updatedKnowledge) await this.setState({ updationError: true });
+        else{
+          await this.updationAnimate();
+          this.props.update(updatedKnowledge);
+        }
+        this.setState({ updated: true, isUpdateOpen: false, updating: false });
       }
-      this.setState({ updated: true, isUpdateOpen: false, updating: false });
     }
   }
 
@@ -144,9 +141,9 @@ export default class KnowledgeItem extends Component {
     });
   }
 
-  createdSuccessfully = () => {
+  reportedSuccessfully = () => {
     return(
-      <div className="created-successfully">
+      <div className="knowledge-report-modal">
         <svg id="successAnimation" className="animated" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 70 70">
           <path id="successAnimationResult" fill="#D8D8D8" d="M35,60 C21.1928813,60 10,48.8071187 10,35 C10,21.1928813 21.1928813,10 35,10 C48.8071187,10 60,21.1928813 60,35 C60,48.8071187 48.8071187,60 35,60 Z M23.6332378,33.2260427 L22.3667622,34.7739573 L34.1433655,44.40936 L47.776114,27.6305926 L46.223886,26.3694074 L33.8566345,41.59064 L23.6332378,33.2260427 Z"/>
           <circle id="successAnimationCircle" cx="35" cy="35" r="24" stroke="#979797" strokeWidth="2" strokeLinecap="round" fill="transparent"/>
@@ -162,18 +159,19 @@ export default class KnowledgeItem extends Component {
   }
 
   reportingElement = () => {
-    const { reportingOpen, reported, reporting, reportingError } = this.state;
+    const { reportingOpen, reported, reporting, reportingError, reportDescriptionError } = this.state;
     if(reportingOpen){
       if(reporting) return <div className="knowledge-modal"><LoadingCircle/></div> 
       else{
         if(reportingError) return <div className="knowledge-modal"><p>Şikayet edilirken bir hata meydana geldi</p></div>
         else if(reported) {
-          return <div className="knowledge-modal">{this.createdSuccessfully()}</div>
+          return <div className="knowledge-modal">{this.reportedSuccessfully()}</div>
         }
         else{
           return(
-            <div className="knowledge-modal">
+            <div className="knowledge-report-modal">
               <p>Şikayet etme sebebiniz nedir?</p>
+              { reportDescriptionError && <p className="error-text mt-3">{reportDescriptionError}</p> }
               <textarea name="reportDescription" className="knowledge-report-textarea" onChange={this.onChange} placeholder="Şikayet sebebi" />
               <div className="knowledge-modal-buttons">
                 <button onClick={this.closeReporting}><FaLongArrowAltLeft className="mr-3"/> Vazgeç</button>
@@ -189,15 +187,23 @@ export default class KnowledgeItem extends Component {
   }
 
   submitReport = async () => {
-    this.setState({ reporting: true });
-    const description = this.state.reportDescription;
-    const reportedItem = this.props.knowledge.dbObject.id;
-    const author = this.props.user.id;
-    const createdAt = new Date();
-    const report = { description, reportedItem, author, createdAt}
-    const status = await Report.create(report);
-    status ? await this.setState({ reported: true }) : await this.setState({ reportingError: true })
-    this.setState({ reporting: false });
+    if(this.validateReport()){
+      this.setState({ reporting: true });
+      const description = this.state.reportDescription;
+      const reportedItem = this.props.knowledge.dbObject.id;
+      const author = this.props.user.id;
+      const createdAt = new Date();
+      const report = { description, reportedItem, author, createdAt}
+      const status = await Report.create(report);
+      status ? await this.setState({ reported: true }) : await this.setState({ reportingError: true })
+      this.setState({ reporting: false });
+    } else {
+      this.setState({ reportDescriptionError: "Bu alan boş bırakılamaz." });
+    }
+  }
+
+  validateReport = () => {
+    return this.state.reportDescription.length <= 0 ? false : true
   }
 
   openReporting = () => {
@@ -211,7 +217,7 @@ export default class KnowledgeItem extends Component {
 
   extraButtons = () => {
     const { user, knowledge } = this.props;
-    if(user.id === knowledge.author.id || knowledge.author.data().type === 0){
+    if(user && (user.id === knowledge.author.id || user.data().type === 0)){
       return(
         <div className="knowledge-extra">
           <button onClick={this.openDeletion}>Sil</button>
@@ -230,7 +236,7 @@ export default class KnowledgeItem extends Component {
 
 
   render() {
-    const { user, knowledge, className } = this.props;
+    const { user, knowledge, className, page } = this.props;
     const { isExtraVisible, deleted, isUpdateOpen, updationAnimation, updatedTitle, updatedTitleError, 
       updatedSource, updatedSourceError, updatedSummary, updatedSummaryError 
     }  = this.state;
@@ -261,7 +267,10 @@ export default class KnowledgeItem extends Component {
               <textarea value={updatedSummary} name="updatedSummary" onChange={this.onChange}/>
             </div>
           :
-            <p>{knowledge.dbObject.data().summary}</p>
+            <React.Fragment>
+              <p>{knowledge.dbObject.data().summary}</p>
+              { !page && <Link href={`/anlatim/${knowledge.dbObject.id}`}><a className="mt-5 p-0 fs-small td-under">Görüntüle <FaLongArrowAltRight className="ml-3" /></a></Link> }
+            </React.Fragment>
           }
         </div>
         <div className="knowledge-source">

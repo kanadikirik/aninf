@@ -1,6 +1,6 @@
 // Components
 import Navbar from '../Navbar';
-import AdminSearch     from '../AdminSearch';
+import AdminSearch  from '../admin/AdminSearch';
 
 export default class AdminHeader extends React.Component {
   render() {

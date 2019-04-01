@@ -1,7 +1,7 @@
 // Services
-import { User } from '../services/User';
+import { User } from '../../services/User';
 // Components
-import { LoadingCircle } from './LoadingCircle'; 
+import { LoadingCircle } from '../LoadingCircle'; 
 import AdminUserView     from './AdminUserView';
 
 export default class AdminUsers extends React.Component {

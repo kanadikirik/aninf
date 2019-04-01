@@ -1,22 +1,21 @@
 @import './colors.scss';
 @import './spacing.scss';
 @import './ui.scss';
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700');
 
-@font-face {
-  font-family: headBold;
-  src: url("/static/font/bold.otf");
+a{
+  display: flex;
+  align-items: center;
 }
 
-@font-face {
-  font-family: fontNormal;
-  src: url("/static/font/regular.otf");
-}
 .cf-blue{
   color: $blue;
 }
 .cf-green{
   color: $green;
+}
+.cf-pink{
+  color: $pink;
 }
 .cf-twitter{
   color: $twitter;
@@ -30,18 +29,39 @@
 .bold{
   font-weight: bold;
 }
+.ta-center{
+  text-align: center;
+}
+.td-under{
+  text-decoration: underline;
+}
 .fs-small{
   font-size: 0.9rem;
 }
+.select-box, .select-box-head, .navbar, .navbar-nav, .home-header, .create-knowledge,
+ .creation-form, .creation-form-buttons, .knowledge-list, .knowledge-list-title, .knowledge,
+  .knowledge-header, .knowledge-extra, .knowledge-modal, .knowledge-modal-buttons, .knowledge-author, 
+  .knowledge-source, .update-buttons{
+  display: flex;
+}
+
+.select-box-head, button, .navbar, .navbar-nav, .create-knowledge, .knowledge-list,
+ .knowledge-list-title, .knowledge-header, .knowledge-modal, .knowledge-modal-buttons, .knowledge-author,
+ .knowledge-source, .update-buttons {
+  align-items: center;
+}
+
+button, input, textarea,.select-box,.select-box-options, .home-header, .navbar-menu, .knowledge, 
+.knowledge-extra, .knowledge-modal {
+  border-radius: $border-radius;
+}
+
 .select-box{
   position: relative;
-  display: flex;
   flex-direction: column;
   background: none;
   border: none;
   background-color: white;
-
-  border-radius: $border-radius;
   outline: none;
   cursor: pointer;
   button{
@@ -49,15 +69,12 @@
   }
 }
 .select-box-head{
-  display: flex;
-  align-items: center;
   @include space('padding', 'y', 1.5);
   @include space('padding', 'x', 3);
 }
 .select-box-options{
   z-index: 9999;
   position: absolute;
-  border-radius: $border-radius;
   background-color: white;
   width: calc(100%);
   margin-top: 2.5rem;
@@ -78,48 +95,68 @@
 h1, h2, h3, h4, h5, h6, p, body{
   margin: 0;
 }
-h1, h2, h3, h4, h5, h6{
-  font-family: headBold;
-}
-p, span, a, button, textarea, input{
-  font-family: fontNormal;
+body, textarea, input, button{
+  font-family: 'Montserrat', sans-serif;
 }
 button{
-  outline: none;
-  border: none;
   background: none;
   cursor: pointer;
-  border-radius: $border-radius;
-  padding: 0.3rem 1rem;
   display: flex;
-  align-items: center;
-  font-size: 1rem;
 }
-a{
-  text-decoration: none;
-  color: black;
-}
-input, textarea{
+button, input, textarea{
+  outline: none;
   border: none;
   @include space('padding', 'y', 1.5);
   @include space('padding', 'x', 4);
   font-size: 1rem;
-  border-radius: $border-radius;
-  outline: none;
 }
 textarea{
   resize: none;
   @include space('padding', 'y', 4);
 }
+a{
+  text-decoration: none;
+  color: black;
+}
+.loading-page{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  img{
+    width: 10%;
+    animation: loading-page-animation 2s infinite ;
+  }
+}
+
+@keyframes loading-page-animation{
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.25
+  }
+  50% {
+    opacity: 0.50
+  }
+  75% {
+    opacity: 0.75
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
 .container{
-  width: 90%;
+  width: 50%;
   margin-left: auto;
   margin-right: auto;
 }
 .navbar{
   position: relative;
-  display: flex;
-  align-items: center;
   justify-content: space-between;
   @include space('padding', 'y', 5);
   a{
@@ -139,14 +176,14 @@ textarea{
   color: $blue;
 }
 .navbar-nav{
-  display: flex;
-  align-items: center;
+}
+.nav-mobile{
+  display: none;
 }
 .navbar-menu{
   position: absolute;
   width: 10rem;
   transform: translateX(-5rem);
-  border-radius: $border-radius;
   @include space('padding', 'y', 3);
   background-color: $light;
   border: $border-slim;
@@ -168,26 +205,29 @@ textarea{
   }
 }
 .home-header{
-  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-around;
-  padding-bottom: 5vh;
-  padding-top: 5vh;
-  margin-bottom: 5vh;
-  img{
-    width: 35%;
+  text-align: center;
+  @include space('padding', 'y', 10);
+  h2{
+    font-size: 1.25rem;
+    font-weight: 700;
   }
-  background-color: rgba($color: #F0F2F6, $alpha: 0.5);
-  border-radius: $border-radius;
+  img{
+    width: 15%;
+    @include space('margin', 'bottom', 5);
+  }
+  background-color: white;
+  box-shadow: 10px 10px 30px rgba($color: #000000, $alpha: 0.05);
 }
 .login-buttons{
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  @include space('padding', 'y', 3);
   button{
     @include space('margin', 'top', 4);
-    @include space('padding', 'y', 2);
-  }
-  button:nth-child(0){
-    margin: 1rem;
   }
 }
 .google-login-button{
@@ -195,23 +235,42 @@ textarea{
   border: 0.1rem solid $blue;
   border-radius: 2rem;
 }
-.create-knowledge{
+.logged-home-header{
+  width: calc(100% - 2rem);
+  background-color: #F0F2F6;
+  border-radius: $border-radius;
+  @include space('padding', 'all', 4);
+}
+.logged-home-header-title{
+  display: flex;
   align-items: center;
-  height: 100%;
+  justify-content: space-between;
+}
+.logged-home-header-title-text{
+  display: flex;
+  align-items: center;
+  img{
+    @include space('margin', 'right', 3);
+    width: 3rem;
+  }
+}
+.create-knowledge{
   justify-content: center;
-
+  width: calc(100% - 2rem);
+  @include space('padding', 'all', 4);
+  background: rgba($color: #F0F2F6, $alpha: 0.5);
+  border-radius: $border-radius;
 }
 .create-knowledge, .creation-form{
-  display: flex;
   flex-direction: column;
 }
 .creation-form{
   align-items: flex-start;
-  width: 60%;
+  width: 100%;
   input, textarea{
     border: 1px solid rgba($color: $blue, $alpha: 0.3);
     @include space('margin', 'y', 3);
-    width: 100%;
+    width: calc(100% - 2rem);
     &:focus{
       border-color: $blue;
     }
@@ -230,7 +289,6 @@ textarea{
   }
 }
 .creation-form-buttons{
-  display: flex;
   width: 100%;
   justify-content: center;
   button{
@@ -248,35 +306,33 @@ textarea{
   }
 }
 .knowledge-list{
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  flex-direction: column;
   transition: all 1s;
-  @include space('margin', 'y', 5);
+  @include space('margin', 'top', 10);
 }
 .knowledge-list-title{
-  display: flex;
-  align-items: center;
   @include space('margin', 'bottom', 5);
   button{
     @include space('margin', 'left', 5);
   }
 }
 .create-button{
+  font-weight: 500;
   background-color: $blue;
-  font-weight: bold;
   color: white;
   border-radius: 1.3rem;
 }
 .knowledge{
+  flex-direction: column;
+  align-items: stretch;
   position: relative;
-  width: 50%;
+  width: calc(100% - 2rem);
   @include space('margin', 'y', 3);
   @include space('padding', 'all', 4);
-  border-radius: $border-radius;
   background-color: rgba($color: #F0F2F6, $alpha: 0.3);
   transition: all 1s;
+  word-break: break-all;
   h4{
     font-size: 1.1rem;
   }
@@ -296,20 +352,11 @@ textarea{
   }
 }
 .knowledge-header{
-  display: flex;
-  align-items: center;
   justify-content: space-between;
   position: relative;
 }
-.knowledge-menu{
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  @include space('padding', 'top', 3);
-}
 .knowledge-extra{
   position: absolute;
-  display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
@@ -317,7 +364,6 @@ textarea{
   color: white;
   transform: translateY(50%) translateX(-1.5em);
   right: 0;
-  border-radius: $border-radius;
   transition: all 1s;
   @include space('padding', 'y', 4);
   button{
@@ -332,21 +378,16 @@ textarea{
 }
 .knowledge-modal{
   position: absolute;
-  display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
   top: -0.1rem;
   left: -0.1rem;
-  border-radius: $border-radius;
   font-weight: bold;
   background-color: rgba($color: #F0F2F6, $alpha: 1)
 }
 .knowledge-modal-buttons{
-  display: flex;
-  align-items: center;
   @include space('margin', 'top', 5);
   button:nth-child(2){
     background-color: $blue;
@@ -354,6 +395,29 @@ textarea{
     border-radius: 2rem;
     font-weight: bold;
     @include space('margin', 'left', 3);
+  }
+}
+.knowledge-report-modal{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color: #000000, $alpha: 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  textarea{
+    width: 50%;
+    @include space('margin', 'y', 5);
+  }
+  button{
+    color: white;
   }
 }
 .knowledge-report-textarea{
@@ -380,8 +444,6 @@ textarea{
 
 }
 .knowledge-author{
-  display: flex;
-  align-items: center;
   img{
     width: 1.5rem;
     height: 1.5rem;
@@ -390,13 +452,11 @@ textarea{
   }
 }
 .knowledge-source{
-  display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   margin-left: calc(1em - 0.75rem);
+  overflow: hidden;
 }
 .update-buttons{
-  display: flex;
-  align-items: center;
   @include space('margin', 'top', 3);
   button:nth-child(2){
     background-color: $blue;
@@ -417,41 +477,5 @@ textarea{
   margin-left: auto;
   margin-right: auto;
 }
-.contact-form{
-  background-color: $light;
-  border-radius: $border-radius;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 50%;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  top: calc(50% - 3.34em + 2.5rem);
-  padding-top: 10vh;
-  padding-bottom: 10vh;
-  transform: translateY(calc(-50% - 3.34em - 2.5rem));
-  input, textarea{
-    border: $border-slim;
-    @include space('margin', 'y', 3);
-    width: 60%;
-    &:focus{
-      border-color: $blue !important;
-    }
-    &::placeholder{
-      font-size: 0.9rem;
-    }
-  }
-  textarea{
-    height: 20vh;
-  }
-}
-.contact-form-group{
-  width: 70%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  text-align: left;
-}
+
+@import './responsive.scss';

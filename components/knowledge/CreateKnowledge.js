@@ -1,7 +1,7 @@
 // Services
-import { Knowledge } from "../services/Knowledge";
+import { Knowledge } from "../../services/Knowledge";
 // Components
-import { LoadingCircle } from './LoadingCircle';
+import { LoadingCircle } from '../LoadingCircle';
 // Icons
 import { FaLongArrowAltLeft, FaLongArrowAltRight, FaGoogle } from 'react-icons/fa';
 
@@ -40,9 +40,18 @@ export default class CreateKnowledge extends React.Component {
     return status;
   }
 
+  validateInputs = () => {
+    const { summary } = this.state;
+    if(summary.length < 50){
+      this.setState({ summaryError: "Özet en az 50 karakter uzunluğunda olmalıdır!" })
+      return false;
+    }
+    return true;
+  }
+
   create = async () => {
     const emptinessControl = this.controlEmptiness();
-    if(emptinessControl){
+    if(emptinessControl && this.validateInputs()){
       await this.setState({ creating: true });
       const { title, summary, source } = this.state;
       const author = this.props.user.id;

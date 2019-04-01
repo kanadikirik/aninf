@@ -1,8 +1,8 @@
 // Services
-import { Knowledge } from "../services/Knowledge";
+import { Knowledge } from "../../services/Knowledge";
 // Components
-import KnowledgeItem from './KnowledgeItem';
-import { LoadingCircle } from './LoadingCircle'; 
+import KnowledgeItem from '../knowledge/KnowledgeItem';
+import { LoadingCircle } from '../LoadingCircle'; 
 
 export default class AdminKnowledges extends React.Component {
 
@@ -24,7 +24,7 @@ export default class AdminKnowledges extends React.Component {
 
   removeKnowledge = (id) => {
     let { knowledges } = this.state;
-    const index = knowledges.findIndex(item => item.data().id === id);
+    const index = knowledges.findIndex(item => item.dbObject.data().id === id);
     knowledges.splice(index, 1);
     this.setState({ knowledges });
   }

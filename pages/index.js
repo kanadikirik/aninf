@@ -1,9 +1,9 @@
 import Head from 'next/head'
 // Components
 import { LoadingPage } from '../components/LoadinPage';
-import Navbar          from '../components/Navbar';;
+import Navbar          from '../components/Navbar';
 import HomeHeader      from '../components/headers/HomeHeader';
-import KnowledgeList   from '../components/KnowledgeList';
+import KnowledgeList   from '../components/knowledge/KnowledgeList';
 
 export default class index extends React.Component {
   
@@ -16,13 +16,13 @@ export default class index extends React.Component {
           <meta charSet="UTF-8" />
           <meta name="description" content="Öğrendiklerini paylaş, paylaştıkça daha çok öğren." />
           <meta name="keywords" content="Yazılım, yazılım paylaşımları, yazılım notları, yazılım bilgileri, yazılım dersleri" />
-          <meta name="author" content="John Doe" />
+          <meta name="author" content="ook0" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         </Head>
         {
           loaded ? 
           <div className="container">
-            <Navbar user={user} signOut={signOut} />
+            <Navbar user={user} signOut={signOut} signIn={signIn} />
             <HomeHeader loaded={loaded} user={user} signIn={signIn} />
             <KnowledgeList user={user} signIn={signIn} />
           </div>

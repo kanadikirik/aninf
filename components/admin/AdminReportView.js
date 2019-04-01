@@ -1,8 +1,8 @@
 // Services
-import { Knowledge } from '../services/Knowledge';
-import { User } from '../services/User';
+import { Knowledge } from '../../services/Knowledge';
+import { User } from '../../services/User';
 // Components
-import { LoadingCircle } from './LoadingCircle'; 
+import { LoadingCircle } from '../LoadingCircle'; 
 // Icnos
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 
@@ -45,7 +45,6 @@ export default class AdminReportView extends React.Component {
 
   getReportAuthor = async () => {
     const reportAuthor = await User.findByID(this.props.report.data().author);
-    console.log(reportAuthor)
     await this.setState({ reportAuthor })
   }
 

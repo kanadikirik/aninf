@@ -1,14 +1,14 @@
 // Services
-import { Knowledge } from "../services/Knowledge";
+import { Knowledge } from "../../services/Knowledge";
 // Components
-import { LoadingCircle } from "./LoadingCircle";
-import KnowledgeItem     from "./KnowledgeItem";
-import SelectBox         from "./SelectBox";
+import { LoadingCircle } from "../LoadingCircle";
+import KnowledgeItem     from "../knowledge/KnowledgeItem";
+import SelectBox         from "../SelectBox";
 // Icnos
 import { FaSearch, FaAngleDown, FaAngleUp } from 'react-icons/fa';
-import { User } from "../services/User";
+import { User } from "../../services/User";
 import AdminUserView from "./AdminUserView";
-import { Report } from "../services/Report";
+import { Report } from "../../services/Report";
 import AdminReportView from "./AdminReportView";
 
 export default class AdminSearch extends React.Component {

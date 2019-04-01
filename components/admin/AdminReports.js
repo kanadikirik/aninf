@@ -1,7 +1,7 @@
 // Services
-import { Report } from '../services/Report';
+import { Report } from '../../services/Report';
 // Components
-import { LoadingCircle } from './LoadingCircle'; 
+import { LoadingCircle } from '../LoadingCircle'; 
 import AdminReportView   from './AdminReportView';
 
 export default class AdminReports extends React.Component {

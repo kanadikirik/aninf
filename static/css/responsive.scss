@@ -1,0 +1,50 @@
+@media screen and (max-width: 720px) {
+  
+  
+  .container{
+    width: 90%;
+  }
+  .loading-page{
+    img{
+      width: 40%;
+      animation: loading-page-animation 2s infinite ;
+    }
+  }
+  .navbar{
+    @include space('padding', 'x', 3);
+  }
+  .nav-mobile{
+    display: block;
+  }
+  .nav-desktop{
+    display: none;
+  }
+  .home-header{
+    flex-direction: column;
+    border-radius: 0;
+    @include space('padding', 'x', 5);    
+    img{
+      width: 30%;
+    }
+  }
+  .knowledge{
+    width: 100%;
+  }
+  .knowledge-list{
+    @include space('padding', 'x', 3);
+  }
+  .knowledge-list-title{
+    flex-direction: column;
+    button{
+      @include space('margin', 'y', 3);      
+    }
+  }
+  .create-knowledge{
+    width: calc(100%);
+  }
+  .knowledge-report-modal{
+    textarea{
+      width: 70%;
+    }
+  }
+}
