@@ -4,7 +4,6 @@ import { Knowledge } from '../services/Knowledge';
 // Components
 import { LoadingPage } from '../components/LoadinPage';
 import Navbar          from '../components/Navbar';
-import HomeHeader      from '../components/headers/HomeHeader';
 import KnowledgeList   from '../components/knowledge/KnowledgeList';
 import KnowledgeItem from '../components/knowledge/KnowledgeItem';
 import { LoadingCircle } from '../components/LoadingCircle';
@@ -12,7 +11,14 @@ import { LoadingCircle } from '../components/LoadingCircle';
 export default class KnowledgePage extends React.Component {
 
   static getInitialProps = async ({query}) => {
-    return { id: query.id }
+    const queryTitle = query.id.split("-");
+    const id = queryTitle[queryTitle.length - 1];
+    const knowledge = await Knowledge.findByID(id);
+    let title = "Anlatım Bulunamadı!"
+    if(knowledge){
+      title = knowledge.dbObject.data().title;
+    }
+    return { id, title }
   }
 
   state= {
@@ -29,7 +35,6 @@ export default class KnowledgePage extends React.Component {
   build = async () => {
     const { id } = this.props;
     const knowledge = await Knowledge.findByID(id);
-    console.log(knowledge)
     if(knowledge){
       await this.setState({ knowledge })
     } else if(knowledge === null){
@@ -38,6 +43,14 @@ export default class KnowledgePage extends React.Component {
       await this.setState({ error: true })
     }
     this.setState({ loading: false })
+  }
+
+  update = (knowledge) => {
+    this.setState({ knowledge })
+  }
+
+  remove = () => {
+    setTimeout(_ => window.location.href = "/", 1500);
   }
 
   knowledgeElement = () => {
@@ -54,7 +67,7 @@ export default class KnowledgePage extends React.Component {
       } else if(error){
         return(
           <React.Fragment>
-            <p>Anlatım bulunurken hata meydana geldi. Bunlara göz atmaya ne dersin?</p>
+            <p className="ta-center my-5 bold">Anlatım bulunurken hata meydana geldi. Bunlara göz atmaya ne dersin?</p>
             <KnowledgeList user={user} signIn={signIn} />
           </React.Fragment>
         )
@@ -62,7 +75,7 @@ export default class KnowledgePage extends React.Component {
         return (
           <React.Fragment>
             <div style={{display: 'flex', alignItems: 'center'}}>
-              <KnowledgeItem user={user} knowledge={knowledge} page />
+              <KnowledgeItem user={user} knowledge={knowledge} remove={this.remove} update={this.update} page />
             </div>
             <KnowledgeList user={user} signIn={signIn} />
           </React.Fragment>
@@ -72,11 +85,11 @@ export default class KnowledgePage extends React.Component {
   }
   
   render() {
-    const { loaded, user, signIn, signOut } = this.props;
+    const { loaded, user, signIn, signOut, title } = this.props;
     return (
       <div className="home">
         <Head>
-          <title>aninf | Öğrendiklerini paylaş, paylaştıkça daha çok öğren</title>
+          <title>{title} | aninf</title>
           <meta charSet="UTF-8" />
           <meta name="description" content="Öğrendiklerini paylaş, paylaştıkça daha çok öğren." />
           <meta name="keywords" content="Yazılım, yazılım paylaşımları, yazılım notları, yazılım bilgileri, yazılım dersleri" />

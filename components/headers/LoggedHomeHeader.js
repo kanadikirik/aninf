@@ -1,6 +1,3 @@
-// Icons
-import { FaTimes } from 'react-icons/fa';
-
 export default class LoggedHomeHeader extends React.Component {
   render() {
     const { user } = this.props;

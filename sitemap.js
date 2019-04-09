@@ -12,16 +12,25 @@ const createSitemap = (res) => {
   })
 
   firebase.firestore().collection("knowledges").get()
-  .then(response => {
-    urlRoutes = [...urlRoutes, ...response.docs]
-    urlRoutes.map(item => {
-      sitemap.add({
-        url: `anlatim/${item.id}`,
-        changeFreq: 'daily',
-        priority: 0.8
+  .then(knowledges => {
+    firebase.firestore().collection("labels").get()
+    .then(labels => {
+      labels.docs.map(label => {
+        sitemap.add({
+          url: `etiket/${label.data().title}`,
+          changeFreq: 'daily',
+          priority: 0.8
+        })
       })
+      knowledges.docs.map(knowledge => {
+        sitemap.add({
+          url: `anlatim/${knowledge.data().title.split(" ").join("-")}-${knowledge.id}`,
+          changeFreq: 'daily',
+          priority: 0.8
+        })
+      })
+      res.send(sitemap.toString());
     })
-    res.send(sitemap.toString());
   })
 }
 

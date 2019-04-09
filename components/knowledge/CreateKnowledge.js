@@ -4,6 +4,7 @@ import { Knowledge } from "../../services/Knowledge";
 import { LoadingCircle } from '../LoadingCircle';
 // Icons
 import { FaLongArrowAltLeft, FaLongArrowAltRight, FaGoogle } from 'react-icons/fa';
+import { Label } from "../../services/Label";
 
 export default class CreateKnowledge extends React.Component {
 
@@ -15,6 +16,9 @@ export default class CreateKnowledge extends React.Component {
     summaryError  : '',
     source        : '',
     sourceError   : '',
+    label         : '',
+    labels        : this.props.label ? [this.props.label.data().title] : [],
+    labelError    : false,
     creating      : false,
     creatingError : false,
     created       : false,
@@ -25,6 +29,12 @@ export default class CreateKnowledge extends React.Component {
     this.setState({ [name]: value }, () => {
       this.setState({ [name+"Error"]: (value.length > 0) ? false : 'Bu alan boş bırakılamaz' });
     });
+  }
+
+  onLabelInputChange = () => {
+    const { value } = event.target;
+    const { labels } = this.state;
+    this.setState({ labels: value.split(',').map(label => { return label.trim() }), labelError: labels.length > 5 ? 'Bir anlatıma en fazla 5 etiket eklenebilir.' : false })
   }
 
   controlEmptiness = () => {
@@ -41,24 +51,33 @@ export default class CreateKnowledge extends React.Component {
   }
 
   validateInputs = () => {
-    const { summary } = this.state;
+    const { summary, labelError } = this.state;
+    let status = true;
     if(summary.length < 50){
       this.setState({ summaryError: "Özet en az 50 karakter uzunluğunda olmalıdır!" })
-      return false;
+      status = false;
     }
-    return true;
+    if(labelError) status = false;
+    return status;
   }
 
   create = async () => {
     const emptinessControl = this.controlEmptiness();
     if(emptinessControl && this.validateInputs()){
       await this.setState({ creating: true });
-      const { title, summary, source } = this.state;
+      const { title, summary, source, labels } = this.state;
       const author = this.props.user.id;
       const createdAt = new Date();
-      const knowledge = {title, summary, source, createdAt, updatedAt: createdAt, author};
+      const knowledge = {title, summary, source, createdAt, updatedAt: createdAt, author, labels};
       const createdKnowledge = await Knowledge.create(knowledge); // if there is not error then status will be id
       if(createdKnowledge){
+        for(let i = 0; i<labels.length; i++){
+          await Label.addKnowledge(labels[i], createdKnowledge.dbObject.id)
+          .then(doc => {
+            labels[i] = doc
+          })
+        }
+        createdKnowledge.labels = labels;
         await this.setState({ created: true });
         this.props.add(createdKnowledge)
       } else await this.setState({ creatingError: true });
@@ -67,19 +86,30 @@ export default class CreateKnowledge extends React.Component {
   }
 
   creationForm = () => {
-    const { titleError, summaryError, sourceError } = this.state;
+    const { titleError, summaryError, sourceError, labels, labelError } = this.state;
     return(
-      <div className="creation-form">
+      <div className="creation-form" >
         <h3 className="mb-3">Bugün ne öğrendin?</h3>
         <span className="bold">Başlık</span>
         {titleError && <span className="error-text">{titleError}</span>}
-        <input name="title" onChange={this.onChange} className={titleError && "border-red"} placeholder="Öğrendiğin konunun başlığı nedir?" />
+        <input name="title" onChange={this.onChange} className={titleError ? "border-red" : ""} placeholder="Öğrendiğin konunun başlığı nedir?" />
         <span className="bold">Özet</span>
         {summaryError && <span className="error-text">{summaryError}</span>}
-        <textarea name="summary" onChange={this.onChange} className={summaryError && "border-red"} placeholder="Öğrendiğini özetleyebilir misin?" />
+        <textarea name="summary" onChange={this.onChange} className={summaryError ? "border-red" : ""} placeholder="Öğrendiğini özetleyebilir misin?" />
         <span className="bold">Kaynak</span>
         {sourceError && <span className="error-text">{sourceError}</span>}
-        <input name="source" onChange={this.onChange} className={sourceError && "border-red"} placeholder="Bu bilgiyi nereden edindin?" />
+        <input name="source" onChange={this.onChange} className={sourceError ? "border-red" : ""} placeholder="Bu bilgiyi nereden edindin?" />
+        <span className="bold">Etiketler</span>
+        <span className="mt-1 fs-small">Etiketleri virgül ' , ' ile ayırınız.</span>
+        {labels.length > 0 && 
+          <div className="labels">
+            {labels.map((label, index) => {
+              return <span key={index} className="label">{label}</span>
+            })}
+          </div>
+        }
+        {labelError && <span className="error-text mt-3">{labelError}</span>}
+        <input name="label" value={labels.join(",")} onChange={this.onLabelInputChange} className={labelError ? "border-red" : ""} placeholder="Etiket başlığı" />
         { this.state.creating ?           
             <LoadingCircle className="mt-3" />
           :
@@ -159,7 +189,7 @@ export default class CreateKnowledge extends React.Component {
     }
 
     return (
-      <div className="create-knowledge">
+      <div className="create-knowledge" id="create-knowledge">
         {this.element}
       </div>
     )

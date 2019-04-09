@@ -30,8 +30,8 @@ export default class SelectBox extends React.Component {
         {open && 
           <div className="select-box-options">
             {
-              options.map(option => {
-                return <button onClick={() => this.select(option)}> {option} </button>
+              options.map((option, index) => {
+                return <button key={index} onClick={() => this.select(option)}> {option} </button>
               })
             }
           </div>

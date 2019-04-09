@@ -5,7 +5,8 @@ import { Report } from '../../services/Report';
 // Components
 import { LoadingCircle } from '../LoadingCircle';
 // Icons
-import { FaLongArrowAltLeft, FaLongArrowAltRight, FaLink, FaTwitter, FaFacebook, FaWhatsapp, FaEllipsisH, FaLess } from 'react-icons/fa';
+import { FaLongArrowAltLeft, FaLongArrowAltRight, FaLink, FaTags, FaEllipsisH } from 'react-icons/fa';
+import { Label } from '../../services/Label';
 
 export default class KnowledgeItem extends React.Component {
 
@@ -25,6 +26,8 @@ export default class KnowledgeItem extends React.Component {
     updatedSummaryError : false,
     updatedSource       : this.props.knowledge.dbObject.data().source,
     updatedSourceError  : false,
+    updatedLabels       : [],
+    updatedLabelsError  : false,
     updationAnimation   : '',
     reportingOpen       : false,
     reporting           : false,
@@ -32,6 +35,19 @@ export default class KnowledgeItem extends React.Component {
     reportingError      : false,
     reportDescription   : '',
     reportDescriptionError: false,
+    url: `${this.props.knowledge.dbObject.data().title.split(" ").join("-")}-${this.props.knowledge.dbObject.id}`,
+  }
+
+  componentDidMount = () => {
+    this.setUpdatedLabels();
+  }
+
+  setUpdatedLabels = () => {
+    const updatedLabels = [];
+    this.props.knowledge.labels.map(label => {
+      updatedLabels.push(label.data().title);
+    })
+    this.setState({ updatedLabels });
   }
 
   submitDeletion = async (id) => {
@@ -39,6 +55,10 @@ export default class KnowledgeItem extends React.Component {
     const status = await Knowledge.delete(id);
     if(!status) this.setState({ deletionError: true });
     else {
+      const labels = this.props.knowledge.labels;
+      labels.map(label => {
+        Label.removeKnowledge(label.id, id, label.data().count);
+      })
       this.setState({ deleted: true },() => {
         setTimeout(() => this.props.remove(id), 2000)
       });
@@ -81,22 +101,63 @@ export default class KnowledgeItem extends React.Component {
   }
 
   submitUpdate = async () => {
-    const { updatedTitle, updatedTitleError, updatedSummary, updatedSummaryError, updatedSource, updatedSourceError } = this.state;
+    const { updatedTitle, updatedTitleError, updatedSummary, updatedSummaryError, updatedSource, updatedSourceError, updatedLabels } = this.state;
     if(updatedSummary.length < 50){
       this.setState({ updatedSummaryError: "Özet en az 50 karakter uzunluğunda olmalıdır!" })
     } else {
       if( !updatedTitleError && !updatedSummaryError && !updatedSourceError ){
         await this.setState({ updating: true })
-        const updatedKnowledge = await Knowledge.update(this.props.knowledge.dbObject.id, updatedTitle, updatedSummary, updatedSource);
+        const updatedKnowledge = await Knowledge.update(this.props.knowledge.dbObject.id, updatedTitle, updatedSummary, updatedSource, updatedLabels);
         if(!updatedKnowledge) await this.setState({ updationError: true });
         else{
           await this.updationAnimate();
           this.props.update(updatedKnowledge);
+          this.updateLabels();
         }
         this.setState({ updated: true, isUpdateOpen: false, updating: false });
       }
     }
   }
+
+  updateLabels = () => {
+    const addedLabels = this.detectAddedLabels();
+    const deletedLabels = this.detectDeletedLabels();
+    addedLabels.map(label => {
+      Label.addKnowledge(label, this.props.knowledge.dbObject.id);
+    })
+    deletedLabels.map(label => {
+      Label.removeKnowledge(label.id, this.props.knowledge.dbObject.id, label.data().count);
+    })
+  }
+  
+  detectDeletedLabels = () => {
+    const { updatedLabels } = this.state;
+    const labels = this.props.knowledge.labels;
+    const deletedLabels = [];
+    labels.map(label => {
+      let deleted = true;
+      updatedLabels.map(updatedLabel => {
+        if(label.data().title === updatedLabel) deleted = false 
+      })
+      if(deleted) deletedLabels.push(label)
+    })
+    return deletedLabels;
+  }
+
+  detectAddedLabels = () => {
+    const { updatedLabels } = this.state;
+    const labels = this.props.knowledge.labels;
+    const addedLabels = [];
+    updatedLabels.map(updatedLabel => {
+      let added = true;      
+      labels.map(label => {
+        if(label.data().title === updatedLabel) added = false;
+      })
+      if(added) addedLabels.push(updatedLabel);
+    })
+    return addedLabels;
+  }
+
 
   closeUpdate = () => {
     this.setState({ isUpdateOpen: false });
@@ -123,9 +184,9 @@ export default class KnowledgeItem extends React.Component {
         )
       } else {
         return(
-          <div className="update-buttons">
+          <div className="update-buttons mt-3">
             <button onClick={this.closeUpdate}><FaLongArrowAltLeft className="mr-3"/> Vazgeç</button>
-            <button onClick={this.submitUpdate}>Güncelle</button>
+            <button className="create-button ml-3" onClick={this.submitUpdate}>Güncelle</button>
           </div>
         )
       }
@@ -141,6 +202,12 @@ export default class KnowledgeItem extends React.Component {
     });
   }
 
+  onLabelInputChange = () => {
+    const { value } = event.target;
+    const { updatedLabels } = this.state;
+    this.setState({ updatedLabels: value.split(','), updatedLabelsError: updatedLabels.length > 5 ? 'Bir anlatıma en fazla 5 etiket eklenebilir.' : false })
+  }
+
   reportedSuccessfully = () => {
     return(
       <div className="knowledge-report-modal">
@@ -149,7 +216,7 @@ export default class KnowledgeItem extends React.Component {
           <circle id="successAnimationCircle" cx="35" cy="35" r="24" stroke="#979797" strokeWidth="2" strokeLinecap="round" fill="transparent"/>
           <polyline id="successAnimationCheck" stroke="#979797" strokeWidth="2" points="23 34 34 43 47 27" fill="transparent"/>
         </svg>
-        <p>Şikayetiniz için teşekkür ederiz, sizin gibi iyi kullanıcılarımız olduğu sürece sırtımız yere gelmez :)</p>
+        <p className="mx-3">Şikayetiniz için teşekkür ederiz, sizin gibi iyi kullanıcılarımız olduğu sürece sırtımız yere gelmez :)</p>
         <button className="mt-5" onClick={this.closeReporting}>
           Bitir
           <FaLongArrowAltRight className="icon-lg ml-3" />
@@ -238,7 +305,7 @@ export default class KnowledgeItem extends React.Component {
   render() {
     const { user, knowledge, className, page } = this.props;
     const { isExtraVisible, deleted, isUpdateOpen, updationAnimation, updatedTitle, updatedTitleError, 
-      updatedSource, updatedSourceError, updatedSummary, updatedSummaryError 
+      updatedSource, updatedSourceError, updatedSummary, updatedSummaryError, updatedLabels, updatedLabelsError
     }  = this.state;
     return (
       <div className={`knowledge ${deleted ? "deletion-animate" : null} ${className} ${updationAnimation}`}>
@@ -269,7 +336,7 @@ export default class KnowledgeItem extends React.Component {
           :
             <React.Fragment>
               <p>{knowledge.dbObject.data().summary}</p>
-              { !page && <Link href={`/anlatim/${knowledge.dbObject.id}`}><a className="mt-5 p-0 fs-small td-under">Görüntüle <FaLongArrowAltRight className="ml-3" /></a></Link> }
+              { !page && <Link href={`/anlatim/${this.state.url}`}><a className="mt-5 p-0 fs-small td-under">Görüntüle <FaLongArrowAltRight className="ml-3" /></a></Link> }
             </React.Fragment>
           }
         </div>
@@ -281,9 +348,31 @@ export default class KnowledgeItem extends React.Component {
               <input value={updatedSource} name="updatedSource" onChange={this.onChange} />
             </div>
           :
-            <a href={knowledge.dbObject.data().source} className="cf-blue">{knowledge.dbObject.data().source}</a>
+            <a href={knowledge.dbObject.data().source} className="cf-blue" target="_blank">{knowledge.dbObject.data().source}</a>
+          } 
+        </div> 
+        <div className="labels">
+          <FaTags className="mr-3" />
+          {isUpdateOpen ? 
+            <React.Fragment>
+              {this.state.updatedLabels.map((label, index) => {
+                return <span key={index} className="label">{label}</span>
+              })}
+            </React.Fragment>
+            : 
+            <React.Fragment>
+              {knowledge.labels.map((label, index) => {
+                return <Link key={index} href={`/etiket/${label.data().title}`}><a key={index} className="label">{label.data().title}</a></Link>
+              })}
+            </React.Fragment>
           }
-        </div>
+        </div>  
+        {isUpdateOpen && 
+          <div>
+            {updatedLabelsError && <p className="error-text">{updatedLabelsError}</p>}
+            <input name="label" placeholder="Etiket başlığı" value={updatedLabels.join(',')} onChange={this.onLabelInputChange} className={updatedLabelsError ? "border-red" : ""} placeholder="Etiket başlığı" />
+          </div>
+        }
         { this.updateButtons() }
       </div>
     )

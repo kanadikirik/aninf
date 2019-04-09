@@ -3,11 +3,18 @@
 @import './ui.scss';
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700');
 
+body{
+
+}
+
 a{
   display: flex;
   align-items: center;
 }
 
+.cf-black{
+  color: black;
+}
 .cf-blue{
   color: $blue;
 }
@@ -37,6 +44,9 @@ a{
 }
 .fs-small{
   font-size: 0.9rem;
+}
+.fs-med{
+  font-size: 1.1rem;
 }
 .select-box, .select-box-head, .navbar, .navbar-nav, .home-header, .create-knowledge,
  .creation-form, .creation-form-buttons, .knowledge-list, .knowledge-list-title, .knowledge,
@@ -154,6 +164,7 @@ a{
   width: 50%;
   margin-left: auto;
   margin-right: auto;
+  @include space('margin', 'bottom', 10);
 }
 .navbar{
   position: relative;
@@ -204,6 +215,9 @@ a{
     }
   }
 }
+.home-header, .logged-home-header{
+  @include space('margin', 'bottom', 8);
+}
 .home-header{
   flex-direction: column;
   align-items: center;
@@ -237,9 +251,10 @@ a{
 }
 .logged-home-header{
   width: calc(100% - 2rem);
-  background-color: #F0F2F6;
+  background-color: white;
   border-radius: $border-radius;
   @include space('padding', 'all', 4);
+  box-shadow: 10px 10px 30px rgba($color: #000000, $alpha: 0.05);
 }
 .logged-home-header-title{
   display: flex;
@@ -281,12 +296,29 @@ a{
   textarea{
     height: 30vh;
   }
-  span, h3{
+  h3{
     color: $blue;
   }
   .error-text{
     color: red;
   }
+}
+.labels{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  @include space('margin', 'top', 2);
+}
+.label{
+  font-size: 0.9rem;
+  background-color: white;
+  box-shadow: $shadow-sm;
+  border-radius: 1rem;  
+  font-weight: 500;
+  @include space('margin', 'right', 2);
+  @include space('margin', 'y', 1);
+  @include space('padding', 'x', 2);
+  @include space('padding', 'y', 1);
 }
 .creation-form-buttons{
   width: 100%;
@@ -309,7 +341,6 @@ a{
   align-items: center;
   flex-direction: column;
   transition: all 1s;
-  @include space('margin', 'top', 10);
 }
 .knowledge-list-title{
   @include space('margin', 'bottom', 5);
@@ -332,7 +363,8 @@ a{
   @include space('padding', 'all', 4);
   background-color: rgba($color: #F0F2F6, $alpha: 0.3);
   transition: all 1s;
-  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
   h4{
     font-size: 1.1rem;
   }
@@ -455,27 +487,81 @@ a{
   flex-wrap: wrap;
   margin-left: calc(1em - 0.75rem);
   overflow: hidden;
+  @include space('margin', 'y', 2);
+}
+.labels{
+  margin-left: calc(1em - 0.75rem); 
 }
 .update-buttons{
-  @include space('margin', 'top', 3);
-  button:nth-child(2){
-    background-color: $blue;
-    color: white;
-    border-radius: 2rem;
-    font-weight: bold;
-    @include space('margin', 'left', 3);
-  }
+  align-self: center;
 }
 .load-more{
   margin-left: auto;
   margin-right: auto;
   font-weight: bold;
 }
-.contact{
-  width: 90%;
-  height: 100vh;
-  margin-left: auto;
-  margin-right: auto;
+.label-page-title{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  @include space('margin', 'bottom', 5);  
+  @include space('padding', 'y', 5);
+  box-shadow: $shadow-sm;
+  border-radius: $border-radius;
+  h2{
+    font-size: 1.25rem;
+  }
+}
+
+.lets-button, .go-down-button{
+  position: fixed;
+  bottom: 1.5rem;
+  right: calc(25%);
+  border-radius: 0.5rem;
+  @include space('padding', 'y', 3);
+  @include space('padding', 'x', 5);
+  font-weight: bold;
+  transition: all 1s;
+  z-index: 9999;
+  &:active, &:hover{
+    background-color: white;
+    color: $blue;
+  }
+}
+.lets-button{
+  box-shadow: 0.1rem 0.1rem 0.3rem rgba($color: $blue, $alpha: 0.5) !important;
+  background-color: $blue;
+  color: white;
+}
+
+.go-down-button{
+  font-size: 0.9rem;
+  background-color: white;
+  color: black;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0.1rem 0.1rem 0.8rem rgba($color: #000000, $alpha: 0.2);
+  white-space: nowrap;
+  @include space('padding', 'y', 2);
+}
+
+.label-list{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @include space('margin', 'y', 5);
+}
+.label-list-content{
+  display: flex;
+  flex-wrap: wrap;
+  @include space('margin', 'y', 3);  
+  .label{
+    font-weight: 500;
+    @include space('padding', 'y', 1.5);
+    @include space('padding', 'x', 2.75);
+  }
 }
 
 @import './responsive.scss';
