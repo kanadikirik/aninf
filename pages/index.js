@@ -14,11 +14,6 @@ export default class index extends React.Component {
       <div className="home">
         <Head>
           <title>aninf | Bildiklerini anlat</title>
-          <meta charSet="UTF-8" />
-          <meta name="description" content="Öğrendiklerini paylaş, paylaştıkça daha çok öğren." />
-          <meta name="keywords" content="Yazılım, yazılım paylaşımları, yazılım notları, yazılım bilgileri, yazılım dersleri" />
-          <meta name="author" content="ook0" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         </Head>
         {
           loaded ? 

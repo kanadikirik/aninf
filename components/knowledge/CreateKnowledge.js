@@ -1,75 +1,59 @@
 // Services
 import { Knowledge } from "../../services/Knowledge";
+import { Label } from "../../services/Label";
+import { controlEmptiness, validateSummary, validateLabels, validateLabelsOnChange } from '../../services/InputValidation';
 // Components
 import { LoadingCircle } from '../LoadingCircle';
 // Icons
 import { FaLongArrowAltLeft, FaLongArrowAltRight, FaGoogle } from 'react-icons/fa';
-import { Label } from "../../services/Label";
 
 export default class CreateKnowledge extends React.Component {
 
   state={
     focusedInput  : '',
     title         : '',
-    titleError    : '',
+    titleError    : false,
     summary       : '',
-    summaryError  : '',
+    summaryError  : false,
     source        : '',
-    sourceError   : '',
+    sourceError   : false,
     label         : '',
     labels        : this.props.label ? [this.props.label.data().title] : [],
-    labelError    : false,
+    labelsError    : false,
     creating      : false,
     creatingError : false,
     created       : false,
   }
 
-  onChange = (event) => {
+  onChange = async (event) => {
     const { name, value } = event.target;
-    this.setState({ [name]: value }, () => {
-      this.setState({ [name+"Error"]: (value.length > 0) ? false : 'Bu alan boş bırakılamaz' });
+    await this.setState({ [name]: name === "labels" ? value.split(',') : value });
+    await this.validateInputsOnChange(name);
+  }
+
+  validateInputsOnChange = (name) => {
+    const response = name === "labels" ? validateLabelsOnChange(this.state.labels) : controlEmptiness({[name]: this.state[name]});
+    return this.setState({ ...response })
+  }
+
+  validateInputs = async () => {
+    const { title, summary, source, labels } = this.state;
+    await this.setState({ 
+      ...controlEmptiness({title, summary, source}),
+      ...validateSummary(summary),
+      ...validateLabels(labels)
     });
-  }
-
-  onLabelInputChange = () => {
-    const { value } = event.target;
-    const { labels } = this.state;
-    this.setState({ labels: value.split(',').map(label => { return label.trim() }), labelError: labels.length > 5 ? 'Bir anlatıma en fazla 5 etiket eklenebilir.' : false })
-  }
-
-  controlEmptiness = () => {
-    let status = true;
-    const inputs =  { title:{}, summary:{}, source:{} };
-    for(const input in inputs){
-      const value = this.state[input];
-      if(value.length <= 0){
-        this.setState({ [input+"Error"]: 'Bu alan boş bırakılamaz' });
-        status = false;
-      }
-    }
-    return status;
-  }
-
-  validateInputs = () => {
-    const { summary, labelError } = this.state;
-    let status = true;
-    if(summary.length < 50){
-      this.setState({ summaryError: "Özet en az 50 karakter uzunluğunda olmalıdır!" })
-      status = false;
-    }
-    if(labelError) status = false;
-    return status;
+    const { titleError, summaryError, sourceError, labelsError } = this.state;
+    return !titleError && !summaryError && !sourceError && !labelsError
   }
 
   create = async () => {
-    const emptinessControl = this.controlEmptiness();
-    if(emptinessControl && this.validateInputs()){
+    if(await this.validateInputs()){
       await this.setState({ creating: true });
       const { title, summary, source, labels } = this.state;
-      const author = this.props.user.id;
-      const createdAt = new Date();
-      const knowledge = {title, summary, source, createdAt, updatedAt: createdAt, author, labels};
-      const createdKnowledge = await Knowledge.create(knowledge); // if there is not error then status will be id
+      const createdKnowledge = await Knowledge.create(
+        Knowledge.dbCreationObject(title, summary, source, new Date(), this.props.user.id, labels)
+      );
       if(createdKnowledge){
         for(let i = 0; i<labels.length; i++){
           await Label.addKnowledge(labels[i], createdKnowledge.dbObject.id)
@@ -86,7 +70,7 @@ export default class CreateKnowledge extends React.Component {
   }
 
   creationForm = () => {
-    const { titleError, summaryError, sourceError, labels, labelError } = this.state;
+    const { titleError, summaryError, sourceError, labels, labelsError } = this.state;
     return(
       <div className="creation-form" >
         <h3 className="mb-3">Bugün ne öğrendin?</h3>
@@ -108,8 +92,8 @@ export default class CreateKnowledge extends React.Component {
             })}
           </div>
         }
-        {labelError && <span className="error-text mt-3">{labelError}</span>}
-        <input name="label" value={labels.join(",")} onChange={this.onLabelInputChange} className={labelError ? "border-red" : ""} placeholder="Etiket başlığı" />
+        {labelsError && <span className="error-text mt-3">{labelsError}</span>}
+        <input name="labels" value={labels.join(",")} onChange={this.onChange} className={labelsError ? "border-red" : ""} placeholder="Etiket başlığı" />
         { this.state.creating ?           
             <LoadingCircle className="mt-3" />
           :

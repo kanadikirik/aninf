@@ -1,6 +1,5 @@
 import firebase from './Firebase';
 import { User } from './User';
-import Axios from 'axios';
 import { Label } from './Label';
 
 export class Knowledge {
@@ -10,6 +9,10 @@ export class Knowledge {
     this.dbObject  = dbObject; 
     this.author    = author;
     this.labels    = labels;
+  }
+
+  static dbCreationObject = (title, summary, source, createdAt, author, labels) => {
+    return { title, summary, source, createdAt, updatedAt: createdAt, author, labels };
   }
 
   static build = async (knowledge) => {

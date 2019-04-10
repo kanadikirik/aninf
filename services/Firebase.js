@@ -1,4 +1,6 @@
-import firebase from 'firebase';
+import app from 'firebase/app';
+require('firebase/auth');
+require('firebase/firestore');
 let config = {
   apiKey: "AIzaSyDu0-sXbkauN6X5Yjw7yiH3PB3L_Dc_BJk",
   authDomain: "aninfdotcom.firebaseapp.com",
@@ -7,5 +9,5 @@ let config = {
   storageBucket: "aninfdotcom.appspot.com",
   messagingSenderId: "936824385421"
 };
-!firebase.apps.length ? firebase.initializeApp(config) : null;
-export default firebase;
+!app.apps.length ? app.initializeApp(config) : null;
+export default app;

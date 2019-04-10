@@ -24,6 +24,17 @@ class MyDocument extends Document {
     return (
       <html>
         <Head>
+          <meta charSet="UTF-8" />
+          <meta name="description" content="Burada herkes teknoloji ve yazılım alanında bildiklerini anlatıyor. Anlatmaya hazır mısın?" />
+          <meta name="keywords" content="Yazılım, yazılım paylaşımları, yazılım notları, teknoloji, teknoloji paylaşımları, teknoloji haberleri, teknolojik gelişmeler" />
+          <meta name="author" content="ook0" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <meta property="og:title" content="aninf | Bildiklerini anlat" />
+          <meta property="og:type" content="article" />
+          <meta property="og:url" content="https://aninf.com/" />
+          <meta property="og:image" content="http://example.com/static/img/aninf-logo.svg" />
+          <meta property="og:description" content="Burada herkes teknoloji ve yazılım alanında bildiklerini anlatıyor. Anlatmaya hazır mısın?" />
+          <meta property="og:site_name" content="aninf" />
           <link rel="shortcut icon" type="image/png" href="/static/img/aninf-icon.ico" />
           <style>{`body { margin: 0 } /* custom! */`}</style>
           {
